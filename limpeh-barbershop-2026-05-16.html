@@ -1,0 +1,1537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Limpeh Barbershop — Hensem Time Since 2015 | Bedok, Singapore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --black: #0e0e0f;
+    --deep: #141416;
+    --card: #1a1a1d;
+    --gold: #c9a84c;
+    --gold-light: #e2c47a;
+    --cream: #f5ede0;
+    --cream-dim: #d4c4ae;
+    --white: #ffffff;
+    --muted: #7a7570;
+  }
+
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* ── Custom Cursor ── */
+  #cursor-dot {
+    width: 8px; height: 8px;
+    background: var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform .1s ease;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1.5px solid var(--gold);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform .18s ease, width .25s, height .25s, opacity .25s;
+    opacity: 0.6;
+    mix-blend-mode: screen;
+  }
+  body:hover #cursor-ring { opacity: 1; }
+
+  /* ── Scroll Progress ── */
+  #progress-bar {
+    position: fixed; top: 0; left: 0;
+    height: 3px; background: var(--gold);
+    width: 0%; z-index: 9000;
+    transition: width .1s linear;
+  }
+
+  /* ── Navigation ── */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%;
+    padding: 20px 48px;
+    display: flex; align-items: center; justify-content: space-between;
+    z-index: 800;
+    background: linear-gradient(to bottom, rgba(14,14,15,0.95) 0%, transparent 100%);
+    backdrop-filter: blur(0px);
+    transition: background .4s, backdrop-filter .4s;
+  }
+  nav.scrolled {
+    background: rgba(14,14,15,0.96);
+    backdrop-filter: blur(14px);
+  }
+  .nav-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.6rem;
+    letter-spacing: .12em;
+    color: var(--white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links {
+    display: flex; gap: 36px; list-style: none;
+  }
+  .nav-links a {
+    font-size: 0.78rem; letter-spacing: .12em; text-transform: uppercase;
+    color: var(--cream-dim); text-decoration: none;
+    transition: color .25s;
+  }
+  .nav-links a:hover { color: var(--gold); }
+  .nav-book {
+    background: var(--gold); color: var(--black);
+    padding: 10px 24px; border-radius: 2px;
+    font-size: 0.78rem; font-weight: 600; letter-spacing: .1em;
+    text-transform: uppercase; text-decoration: none;
+    transition: background .25s;
+  }
+  .nav-book:hover { background: var(--gold-light); }
+
+  /* ── Hero ── */
+  #hero {
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    position: relative; overflow: hidden;
+    padding: 120px 48px 80px;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 80% at 50% 40%, #1f1a10 0%, #0e0e0f 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2;
+    display: flex; align-items: center;
+    gap: 60px; max-width: 1200px; width: 100%;
+  }
+  .hero-text { flex: 1; }
+  .hero-eyebrow {
+    font-size: 0.72rem; letter-spacing: .25em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 18px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: ''; display: block;
+    width: 40px; height: 1px; background: var(--gold);
+  }
+  .hero-headline {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 10vw, 9rem);
+    line-height: 0.92;
+    color: var(--white);
+    letter-spacing: .02em;
+    margin-bottom: 28px;
+  }
+  .hero-headline span { color: var(--gold); }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.25rem; font-style: italic;
+    color: var(--cream-dim);
+    line-height: 1.6;
+    max-width: 440px;
+    margin-bottom: 40px;
+  }
+  .hero-cta {
+    display: flex; gap: 16px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--gold); color: var(--black);
+    padding: 15px 36px; border-radius: 2px;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    text-decoration: none; transition: background .25s, transform .2s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-2px); }
+  .btn-outline {
+    border: 1px solid var(--gold); color: var(--gold);
+    padding: 15px 36px; border-radius: 2px;
+    font-size: 0.82rem; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    text-decoration: none; transition: background .25s, color .25s, transform .2s;
+  }
+  .btn-outline:hover { background: var(--gold); color: var(--black); transform: translateY(-2px); }
+  .hero-stats {
+    display: flex; gap: 32px; margin-top: 52px;
+  }
+  .stat-item { text-align: center; }
+  .stat-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.6rem; color: var(--gold);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.7rem; letter-spacing: .1em;
+    text-transform: uppercase; color: var(--muted);
+    margin-top: 4px;
+  }
+  .hero-illustration { flex: 0 0 420px; }
+
+  /* ── Barber SVG Illustration ── */
+  .barber-svg { width: 100%; height: auto; }
+
+  /* ── Marquee ── */
+  .marquee-wrap {
+    background: var(--gold);
+    padding: 14px 0; overflow: hidden;
+  }
+  .marquee-track {
+    display: flex; gap: 0;
+    animation: marquee 28s linear infinite;
+    white-space: nowrap;
+  }
+  .marquee-item {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; letter-spacing: .12em;
+    color: var(--black);
+    padding: 0 32px;
+    display: inline-flex; align-items: center; gap: 32px;
+  }
+  .marquee-item::after {
+    content: '✦'; font-size: .7rem;
+  }
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  /* ── Section Base ── */
+  section { padding: 100px 48px; }
+  .section-label {
+    font-size: 0.7rem; letter-spacing: .22em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::before {
+    content: ''; display: block;
+    width: 32px; height: 1px; background: var(--gold);
+  }
+  .section-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(3rem, 6vw, 5.5rem);
+    line-height: 0.95; color: var(--white);
+    letter-spacing: .02em;
+  }
+  .section-title span { color: var(--gold); }
+  .container { max-width: 1200px; margin: 0 auto; }
+
+  /* ── About ── */
+  #about { background: var(--deep); }
+  .about-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: center;
+  }
+  .about-visual {
+    position: relative;
+  }
+  .about-frame {
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    aspect-ratio: 4/5;
+    background: var(--card);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .about-badge {
+    position: absolute;
+    bottom: -20px; right: -20px;
+    width: 120px; height: 120px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 2;
+  }
+  .about-badge-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2.2rem; color: var(--black); line-height: 1;
+  }
+  .about-badge-text {
+    font-size: 0.62rem; font-weight: 600;
+    letter-spacing: .08em; color: var(--black);
+    text-transform: uppercase; text-align: center;
+    line-height: 1.2;
+  }
+  .about-text { }
+  .about-text p {
+    color: var(--cream-dim);
+    font-size: 1.05rem; line-height: 1.8;
+    margin-top: 24px;
+  }
+  .about-text p strong { color: var(--gold); font-weight: 600; }
+  .about-highlights {
+    display: flex; gap: 24px; margin-top: 36px; flex-wrap: wrap;
+  }
+  .highlight-pill {
+    background: rgba(201,168,76,0.08);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--gold);
+    padding: 8px 18px; border-radius: 100px;
+    font-size: 0.78rem; font-weight: 500;
+    letter-spacing: .06em;
+  }
+
+  /* ── Services ── */
+  #services { background: var(--black); }
+  .services-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 60px;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2px;
+  }
+  .price-card {
+    background: var(--card);
+    padding: 36px 32px;
+    position: relative;
+    overflow: hidden;
+    transition: background .3s;
+  }
+  .price-card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 0;
+    background: var(--gold);
+    transition: height .4s ease;
+  }
+  .price-card:hover { background: #1f1e1b; }
+  .price-card:hover::before { height: 100%; }
+  .price-icon {
+    width: 44px; height: 44px;
+    margin-bottom: 20px;
+  }
+  .price-service {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem; font-weight: 600;
+    color: var(--white); margin-bottom: 8px;
+  }
+  .price-desc {
+    font-size: 0.85rem; color: var(--muted);
+    line-height: 1.6; margin-bottom: 20px;
+  }
+  .price-amount {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--gold);
+    letter-spacing: .04em;
+  }
+  .price-note {
+    font-size: 0.7rem; color: var(--muted);
+    letter-spacing: .06em; text-transform: uppercase;
+    margin-left: 6px;
+  }
+
+  /* ── Gallery ── */
+  #gallery { background: var(--deep); }
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px; margin-top: 56px;
+  }
+  .gallery-card {
+    aspect-ratio: 4/5;
+    background: var(--card);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+  }
+  .gallery-card:first-child {
+    grid-row: span 2;
+    aspect-ratio: auto;
+  }
+  .gallery-card svg { width: 100%; height: 100%; }
+  .gallery-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(14,14,15,0.9) 0%, transparent 60%);
+    opacity: 0; transition: opacity .3s;
+    display: flex; align-items: flex-end;
+    padding: 24px;
+  }
+  .gallery-card:hover .gallery-overlay { opacity: 1; }
+  .gallery-label {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.3rem; color: var(--white);
+    letter-spacing: .06em;
+  }
+
+  /* ── Reviews ── */
+  #reviews {
+    background: var(--black);
+    position: relative; overflow: hidden;
+  }
+  #reviews::before {
+    content: '"';
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 32rem;
+    color: rgba(201,168,76,0.03);
+    position: absolute; top: -80px; left: -40px;
+    line-height: 1; pointer-events: none;
+    z-index: 0;
+  }
+  .reviews-header {
+    display: flex; justify-content: space-between;
+    align-items: flex-end; margin-bottom: 56px;
+    position: relative; z-index: 1;
+    flex-wrap: wrap; gap: 24px;
+  }
+  .review-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 24px; position: relative; z-index: 1;
+  }
+  .review-card {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.05);
+    border-radius: 4px; padding: 36px;
+    transition: border-color .3s, transform .3s;
+  }
+  .review-card:hover {
+    border-color: rgba(201,168,76,0.3);
+    transform: translateY(-4px);
+  }
+  .review-stars {
+    display: flex; gap: 4px; margin-bottom: 20px;
+  }
+  .star { color: var(--gold); font-size: 1rem; }
+  .review-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; font-style: italic;
+    color: var(--cream-dim);
+    line-height: 1.75; margin-bottom: 24px;
+  }
+  .review-author {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .review-avatar {
+    width: 42px; height: 42px;
+    background: var(--gold);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; color: var(--black);
+    flex-shrink: 0;
+  }
+  .review-name {
+    font-weight: 600; font-size: 0.9rem; color: var(--white);
+  }
+  .review-via {
+    font-size: 0.75rem; color: var(--muted); margin-top: 2px;
+  }
+  .google-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 100px; padding: 8px 18px;
+    font-size: 0.8rem; color: var(--gold); font-weight: 500;
+  }
+
+  /* ── Contact / Booking ── */
+  #contact { background: var(--deep); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 80px; align-items: start;
+  }
+  .contact-info { }
+  .contact-info p {
+    color: var(--cream-dim); font-size: 1.05rem;
+    line-height: 1.8; margin-top: 20px;
+  }
+  .contact-details {
+    margin-top: 40px; display: flex; flex-direction: column; gap: 18px;
+  }
+  .contact-row {
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .contact-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: rgba(201,168,76,0.1);
+    border-radius: 2px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .contact-icon svg { width: 18px; height: 18px; }
+  .contact-detail-label {
+    font-size: 0.7rem; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 4px;
+  }
+  .contact-detail-val {
+    font-size: 0.95rem; color: var(--cream);
+  }
+  .contact-detail-val a {
+    color: var(--cream); text-decoration: none;
+    transition: color .25s;
+  }
+  .contact-detail-val a:hover { color: var(--gold); }
+  .whatsapp-btn {
+    display: inline-flex; align-items: center; gap: 10px;
+    background: #25d366; color: #fff;
+    padding: 14px 28px; border-radius: 2px;
+    font-size: 0.85rem; font-weight: 600;
+    letter-spacing: .08em; text-transform: uppercase;
+    text-decoration: none; margin-top: 32px;
+    transition: background .25s, transform .2s;
+  }
+  .whatsapp-btn:hover { background: #1ebe5a; transform: translateY(-2px); }
+  .contact-form-wrap {
+    background: var(--card);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 4px; padding: 48px;
+  }
+  .contact-form-wrap h3 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--white);
+    letter-spacing: .04em; margin-bottom: 32px;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block; font-size: 0.72rem;
+    letter-spacing: .12em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%; background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 2px; padding: 13px 16px;
+    color: var(--cream); font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem; outline: none;
+    transition: border-color .25s;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); }
+  .form-group textarea { min-height: 100px; resize: vertical; }
+  .form-group select option { background: var(--card); }
+  .form-submit {
+    width: 100%; background: var(--gold); color: var(--black);
+    border: none; padding: 15px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.85rem; font-weight: 600;
+    letter-spacing: .12em; text-transform: uppercase;
+    border-radius: 2px; cursor: none;
+    transition: background .25s, transform .2s;
+    margin-top: 8px;
+  }
+  .form-submit:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+  /* ── Footer ── */
+  footer {
+    background: #090909;
+    padding: 64px 48px 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-top {
+    display: flex; justify-content: space-between;
+    align-items: flex-start; gap: 48px;
+    flex-wrap: wrap; margin-bottom: 48px;
+  }
+  .footer-brand {}
+  .footer-logo {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 2rem; color: var(--white);
+    letter-spacing: .1em; margin-bottom: 12px;
+  }
+  .footer-logo span { color: var(--gold); }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    color: var(--muted); font-size: 0.95rem;
+  }
+  .footer-links h4 {
+    font-size: 0.7rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .footer-links ul { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+  .footer-links a {
+    font-size: 0.88rem; color: var(--muted);
+    text-decoration: none; transition: color .25s;
+  }
+  .footer-links a:hover { color: var(--cream); }
+  .footer-hours h4 {
+    font-size: 0.7rem; letter-spacing: .18em;
+    text-transform: uppercase; color: var(--gold);
+    margin-bottom: 18px;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between; gap: 32px;
+    font-size: 0.85rem; color: var(--muted);
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .hours-day { }
+  .hours-time { color: var(--cream-dim); }
+  .footer-bottom {
+    display: flex; justify-content: space-between;
+    align-items: center; flex-wrap: wrap; gap: 16px;
+    padding-top: 32px;
+    border-top: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-copy {
+    font-size: 0.78rem; color: var(--muted);
+  }
+  .footer-socials { display: flex; gap: 16px; }
+  .footer-socials a {
+    width: 36px; height: 36px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); text-decoration: none;
+    font-size: 0.8rem; transition: border-color .25s, color .25s;
+  }
+  .footer-socials a:hover { border-color: var(--gold); color: var(--gold); }
+
+  /* ── Scroll Animation ── */
+  .fade-up {
+    opacity: 0; transform: translateY(32px);
+    transition: opacity .7s ease, transform .7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1; transform: translateY(0);
+  }
+  .fade-up:nth-child(2) { transition-delay: .1s; }
+  .fade-up:nth-child(3) { transition-delay: .2s; }
+  .fade-up:nth-child(4) { transition-delay: .3s; }
+  .fade-up:nth-child(5) { transition-delay: .4s; }
+  .fade-up:nth-child(6) { transition-delay: .5s; }
+
+  /* ── Mobile ── */
+  @media (max-width: 900px) {
+    nav { padding: 18px 24px; }
+    .nav-links { display: none; }
+    section { padding: 72px 24px; }
+    #hero { padding: 100px 24px 64px; }
+    .hero-content { flex-direction: column-reverse; gap: 32px; }
+    .hero-illustration { flex: none; width: 280px; align-self: center; }
+    .hero-stats { gap: 20px; }
+    .about-grid { grid-template-columns: 1fr; gap: 40px; }
+    .about-frame { aspect-ratio: 16/9; }
+    .gallery-grid { grid-template-columns: 1fr 1fr; }
+    .gallery-card:first-child { grid-row: auto; }
+    .review-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .contact-form-wrap { padding: 28px; }
+    .footer-top { flex-direction: column; }
+    .pricing-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- Progress Bar -->
+<div id="progress-bar"></div>
+
+<!-- ══ Navigation ══ -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">LIM<span>PEH</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <a href="https://wa.me/6594225895" target="_blank" class="nav-book">Book via WhatsApp</a>
+</nav>
+
+<!-- ══ Hero ══ -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content container">
+    <div class="hero-text">
+      <div class="hero-eyebrow">Bedok North · Est. 2015</div>
+      <h1 class="hero-headline">HENSEM<br><span>TIME</span><br>SINCE<br>'15</h1>
+      <p class="hero-sub">Precision cuts, hot towel shaves, and genuine heartland hospitality — because looking good like your limpeh never goes out of style.</p>
+      <div class="hero-cta">
+        <a href="https://wa.me/6594225895" target="_blank" class="btn-primary">WhatsApp to Book</a>
+        <a href="#services" class="btn-outline">View Pricing</a>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">2,297+</div>
+          <div class="stat-label">Google Reviews</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">4.9★</div>
+          <div class="stat-label">Avg Rating</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-num">10+</div>
+          <div class="stat-label">Years Serving Bedok</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barber Shop SVG Illustration -->
+    <div class="hero-illustration">
+      <svg class="barber-svg" viewBox="0 0 420 520" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Background panel -->
+        <rect width="420" height="520" rx="8" fill="#1a1a1d"/>
+
+        <!-- Barber pole -->
+        <rect x="30" y="60" width="22" height="320" rx="4" fill="#2a2a2d"/>
+        <rect x="30" y="60" width="22" height="16" rx="3" fill="#c9a84c"/>
+        <rect x="30" y="92" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="108" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="124" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="140" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="156" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="172" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="188" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="204" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="220" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="236" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="252" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="268" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="284" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="300" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="316" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <rect x="30" y="332" width="22" height="16" rx="0" fill="#c9a84c"/>
+        <rect x="30" y="348" width="22" height="16" rx="0" fill="#e8e8e8"/>
+        <!-- Pole cap -->
+        <ellipse cx="41" cy="60" rx="14" ry="8" fill="#c9a84c"/>
+        <ellipse cx="41" cy="380" rx="14" ry="8" fill="#888"/>
+
+        <!-- Mirror frame -->
+        <rect x="90" y="50" width="200" height="260" rx="6" fill="#232325" stroke="#c9a84c" stroke-width="2" stroke-opacity="0.4"/>
+        <rect x="100" y="60" width="180" height="240" rx="3" fill="#16161a"/>
+        <!-- Mirror reflection shimmer -->
+        <line x1="115" y1="70" x2="130" y2="285" stroke="white" stroke-width="1.5" stroke-opacity="0.04"/>
+        <line x1="145" y1="65" x2="155" y2="290" stroke="white" stroke-width="1" stroke-opacity="0.03"/>
+
+        <!-- Barber chair silhouette -->
+        <!-- Chair back -->
+        <rect x="148" y="320" width="124" height="110" rx="12" fill="#2c2520"/>
+        <rect x="158" y="330" width="104" height="90" rx="8" fill="#3a3028"/>
+        <!-- Headrest -->
+        <rect x="168" y="305" width="84" height="30" rx="8" fill="#2c2520"/>
+        <!-- Chair seat -->
+        <rect x="130" y="420" width="160" height="40" rx="8" fill="#2c2520"/>
+        <rect x="138" y="428" width="144" height="24" rx="6" fill="#3a3028"/>
+        <!-- Armrests -->
+        <rect x="118" y="390" width="30" height="55" rx="6" fill="#232520"/>
+        <rect x="272" y="390" width="30" height="55" rx="6" fill="#232520"/>
+        <!-- Chrome pole center -->
+        <rect x="198" y="460" width="24" height="40" rx="3" fill="#555"/>
+        <!-- Base -->
+        <rect x="158" y="495" width="104" height="14" rx="6" fill="#444"/>
+        <rect x="140" y="505" width="140" height="10" rx="4" fill="#333"/>
+
+        <!-- Person in chair (silhouette) -->
+        <!-- Head -->
+        <circle cx="210" cy="315" r="34" fill="#c9a84c" opacity="0.9"/>
+        <!-- Hair being cut - fade effect -->
+        <path d="M 180 302 Q 210 278 240 302" stroke="#c9a84c" stroke-width="2" fill="none" opacity="0.6"/>
+        <!-- Face features simplified -->
+        <circle cx="200" cy="312" r="3.5" fill="#141416"/>
+        <circle cx="220" cy="312" r="3.5" fill="#141416"/>
+        <path d="M 200 325 Q 210 332 220 325" stroke="#141416" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+        <!-- Neck -->
+        <rect x="198" y="346" width="24" height="20" rx="4" fill="#c9a84c" opacity="0.85"/>
+        <!-- Cape -->
+        <path d="M 148 355 Q 160 365 210 370 Q 260 365 272 355 L 272 430 Q 250 445 210 448 Q 170 445 148 430 Z" fill="#1a1a20" stroke="#333" stroke-width="1"/>
+
+        <!-- Barber standing (scissors/tools) -->
+        <!-- Barber hand with scissors -->
+        <line x1="82" y1="310" x2="145" y2="308" stroke="#666" stroke-width="2"/>
+        <!-- Scissors -->
+        <g transform="translate(82,300)">
+          <line x1="0" y1="0" x2="24" y2="18" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+          <line x1="0" y1="18" x2="24" y2="0" stroke="#c9a84c" stroke-width="2.5" stroke-linecap="round"/>
+          <circle cx="0" cy="0" r="5" fill="none" stroke="#c9a84c" stroke-width="2"/>
+          <circle cx="0" cy="18" r="5" fill="none" stroke="#c9a84c" stroke-width="2"/>
+        </g>
+
+        <!-- Shelf with products -->
+        <rect x="90" y="316" width="200" height="6" rx="2" fill="#2a2a2d"/>
+        <!-- Product bottles -->
+        <rect x="100" y="290" width="18" height="26" rx="5" fill="#c9a84c" opacity="0.7"/>
+        <rect x="102" y="285" width="14" height="8" rx="2" fill="#b8953e" opacity="0.7"/>
+        <rect x="126" y="294" width="14" height="22" rx="4" fill="#e8e8e8" opacity="0.4"/>
+        <rect x="148" y="296" width="12" height="20" rx="4" fill="#c9a84c" opacity="0.5"/>
+        <rect x="168" y="292" width="16" height="24" rx="5" fill="#8b7355" opacity="0.6"/>
+        <rect x="194" y="295" width="13" height="21" rx="4" fill="#e8e8e8" opacity="0.3"/>
+        <rect x="215" y="298" width="14" height="18" rx="4" fill="#c9a84c" opacity="0.6"/>
+        <rect x="237" y="294" width="16" height="22" rx="5" fill="#d4c4ae" opacity="0.4"/>
+        <rect x="261" y="296" width="14" height="20" rx="4" fill="#c9a84c" opacity="0.55"/>
+
+        <!-- Gold accent divider lines -->
+        <line x1="0" y1="510" x2="420" y2="510" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.2"/>
+
+        <!-- Text at bottom -->
+        <text x="210" y="490" text-anchor="middle" font-family="'Bebas Neue', sans-serif" font-size="13" fill="#c9a84c" letter-spacing="4" opacity="0.8">BEDOK NORTH · SINGAPORE</text>
+
+        <!-- Stars rating -->
+        <text x="148" y="506" font-family="Arial" font-size="10" fill="#c9a84c">★★★★★</text>
+        <text x="210" y="506" text-anchor="middle" font-family="'DM Sans', sans-serif" font-size="8" fill="#888" letter-spacing="1">2,297+ REVIEWS</text>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Marquee ══ -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Classic Haircut</span>
+    <span class="marquee-item">Skin Fade</span>
+    <span class="marquee-item">Mid Fade</span>
+    <span class="marquee-item">Beard Trim</span>
+    <span class="marquee-item">Full Clean Shave</span>
+    <span class="marquee-item">Hot Towel Massage</span>
+    <span class="marquee-item">Eyebrow Trim</span>
+    <span class="marquee-item">Kid's Cut</span>
+    <span class="marquee-item">NSF Discount</span>
+    <span class="marquee-item">Bedok North</span>
+    <span class="marquee-item">Classic Haircut</span>
+    <span class="marquee-item">Skin Fade</span>
+    <span class="marquee-item">Mid Fade</span>
+    <span class="marquee-item">Beard Trim</span>
+    <span class="marquee-item">Full Clean Shave</span>
+    <span class="marquee-item">Hot Towel Massage</span>
+    <span class="marquee-item">Eyebrow Trim</span>
+    <span class="marquee-item">Kid's Cut</span>
+    <span class="marquee-item">NSF Discount</span>
+    <span class="marquee-item">Bedok North</span>
+  </div>
+</div>
+
+<!-- ══ About ══ -->
+<section id="about">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual fade-up">
+        <div class="about-frame">
+          <!-- Shop Interior SVG -->
+          <svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%">
+            <!-- Wall -->
+            <rect width="400" height="500" fill="#16161a"/>
+            <!-- Floor -->
+            <rect y="380" width="400" height="120" fill="#1a1a1d"/>
+            <line x1="0" y1="380" x2="400" y2="380" stroke="#c9a84c" stroke-width="1.5" opacity="0.3"/>
+            <!-- Wall tiles / panels -->
+            <rect x="20" y="30" width="360" height="320" rx="4" fill="#1e1e22" stroke="#2a2a2e" stroke-width="1"/>
+            <!-- HDB heartland window -->
+            <rect x="140" y="55" width="120" height="80" rx="3" fill="#0a0f18" stroke="#333" stroke-width="2"/>
+            <line x1="200" y1="55" x2="200" y2="135" stroke="#333" stroke-width="1.5"/>
+            <line x1="140" y1="95" x2="260" y2="95" stroke="#333" stroke-width="1.5"/>
+            <!-- Window light glow -->
+            <rect x="142" y="57" width="57" height="37" fill="#1a2535" opacity="0.7"/>
+            <rect x="201" y="57" width="57" height="37" fill="#182030" opacity="0.7"/>
+            <!-- Stripe barber colours on wall -->
+            <rect x="20" y="145" width="8" height="100" fill="#c9a84c" opacity="0.7" rx="2"/>
+            <rect x="372" y="145" width="8" height="100" fill="#c9a84c" opacity="0.7" rx="2"/>
+            <!-- Mirror large -->
+            <rect x="55" y="160" width="120" height="150" rx="4" fill="#111115" stroke="#c9a84c" stroke-width="1.5" stroke-opacity="0.5"/>
+            <!-- Mirror reflection shimmer -->
+            <line x1="68" y1="170" x2="75" y2="300" stroke="white" stroke-width="1" opacity="0.05"/>
+            <!-- Product shelf on mirror -->
+            <rect x="55" y="305" width="120" height="5" rx="1" fill="#c9a84c" opacity="0.6"/>
+            <rect x="62" y="288" width="10" height="17" rx="3" fill="#c9a84c" opacity="0.7"/>
+            <rect x="76" y="292" width="8" height="13" rx="2" fill="#fff" opacity="0.2"/>
+            <rect x="88" y="290" width="10" height="15" rx="2" fill="#c9a84c" opacity="0.5"/>
+            <rect x="102" y="291" width="8" height="14" rx="2" fill="#fff" opacity="0.3"/>
+            <rect x="114" y="289" width="10" height="16" rx="2" fill="#c9a84c" opacity="0.4"/>
+            <rect x="128" y="293" width="8" height="12" rx="2" fill="#666" opacity="0.5"/>
+            <rect x="143" y="290" width="9" height="15" rx="2" fill="#c9a84c" opacity="0.6"/>
+            <rect x="157" y="292" width="8" height="13" rx="2" fill="#fff" opacity="0.2"/>
+            <!-- Second station -->
+            <rect x="225" y="160" width="120" height="150" rx="4" fill="#111115" stroke="#c9a84c" stroke-width="1.5" stroke-opacity="0.5"/>
+            <rect x="225" y="305" width="120" height="5" rx="1" fill="#c9a84c" opacity="0.6"/>
+            <!-- Chairs front row -->
+            <rect x="80" y="330" width="80" height="50" rx="6" fill="#2c2520"/>
+            <rect x="88" y="338" width="64" height="34" rx="4" fill="#3a3028"/>
+            <rect x="240" y="330" width="80" height="50" rx="6" fill="#2c2520"/>
+            <rect x="248" y="338" width="64" height="34" rx="4" fill="#3a3028"/>
+            <!-- Floor mat -->
+            <rect x="60" y="376" width="280" height="4" rx="2" fill="#c9a84c" opacity="0.2"/>
+            <!-- Sign on wall -->
+            <rect x="155" y="155" width="90" height="30" rx="3" fill="#c9a84c" opacity="0.15" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.4"/>
+            <text x="200" y="175" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="11" fill="#c9a84c" letter-spacing="3" opacity="0.9">LIMPEH</text>
+            <!-- Potted plant -->
+            <rect x="360" y="340" width="22" height="38" rx="2" fill="#2a3020"/>
+            <ellipse cx="371" cy="340" rx="18" ry="12" fill="#1e2a18"/>
+            <line x1="371" y1="328" x2="364" y2="310" stroke="#3a5028" stroke-width="2.5"/>
+            <line x1="371" y1="322" x2="380" y2="308" stroke="#3a5028" stroke-width="2"/>
+            <line x1="371" y1="330" x2="356" y2="318" stroke="#3a5028" stroke-width="2"/>
+            <circle cx="364" cy="308" r="7" fill="#2d4020" opacity="0.9"/>
+            <circle cx="381" cy="306" r="6" fill="#2d4020" opacity="0.9"/>
+            <circle cx="355" cy="316" r="5" fill="#2d4020" opacity="0.9"/>
+          </svg>
+        </div>
+        <div class="about-badge">
+          <div class="about-badge-num">10+</div>
+          <div class="about-badge-text">Years<br>Serving<br>Bedok</div>
+        </div>
+      </div>
+
+      <div class="about-text fade-up">
+        <div class="section-label">Our Story</div>
+        <h2 class="section-title">A CUT<br>ABOVE THE<br><span>HEARTLAND</span></h2>
+        <p>Limpeh Barbershop was born in 2015 from a bold vision: <strong>Siti Rafidah</strong> — known as Fidd — opened her doors in the quiet streets of Bedok North, choosing to serve the community she grew up in.</p>
+        <p>The name "Limpeh" means <em>my father</em> in Hokkien, and the tagline says it all: <strong>"Hensem like your limpeh"</strong> — because every man who walks out of this shop should feel that kind of confidence.</p>
+        <p>What started as a one-woman show is now a <strong>four-barber team</strong> — Johan, Asyraf, Zack, and Fidd — delivering precision cuts and genuine warmth, appointment by appointment, cut by cut.</p>
+        <div class="about-highlights">
+          <span class="highlight-pill">Est. 2015</span>
+          <span class="highlight-pill">Bedok Heartland</span>
+          <span class="highlight-pill">Female-Founded</span>
+          <span class="highlight-pill">By Appointment</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Services & Pricing ══ -->
+<section id="services">
+  <div class="container">
+    <div class="services-header">
+      <div>
+        <div class="section-label">The Menu</div>
+        <h2 class="section-title">SERVICES<br>& <span>PRICING</span></h2>
+      </div>
+      <p style="color:var(--muted); font-size:0.9rem; max-width:280px; line-height:1.7;">
+        All appointments are strictly by booking. Walk-ins subject to availability.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+      <div class="price-card fade-up">
+        <svg class="price-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="14" r="10" stroke="#c9a84c" stroke-width="1.5"/>
+          <path d="M10 36c0-6.627 5.373-12 12-12s12 5.373 12 12" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M16 20l3 4 7-8" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="price-service">Haircut + Hairwash</div>
+        <div class="price-desc">Classic cut with a full shampoo wash. Adult rates include consultation and style finish.</div>
+        <div>
+          <span class="price-amount">S$30</span>
+          <span class="price-note">Adult</span>
+        </div>
+      </div>
+
+      <div class="price-card fade-up">
+        <svg class="price-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8 18 L22 6 L36 18" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 18v14h16V18" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <rect x="18" y="26" width="8" height="6" rx="1" stroke="#c9a84c" stroke-width="1.5"/>
+        </svg>
+        <div class="price-service">Student / NSF Rate</div>
+        <div class="price-desc">Full-service haircut + hairwash at a special rate for tertiary students and National Servicemen.</div>
+        <div>
+          <span class="price-amount">S$25</span>
+          <span class="price-note">w/ valid card</span>
+        </div>
+      </div>
+
+      <div class="price-card fade-up">
+        <svg class="price-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 6v6M22 32v6M6 22h6M32 22h6" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="22" cy="22" r="10" stroke="#c9a84c" stroke-width="1.5"/>
+          <path d="M17 22c1.5-3 7.5-3 9 0" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="price-service">Haircut + Hot Towel Massage</div>
+        <div class="price-desc">The full experience — your cut paired with a relaxing hot towel scalp and neck massage.</div>
+        <div>
+          <span class="price-amount">S$25</span>
+          <span class="price-note">Adult</span>
+        </div>
+      </div>
+
+      <div class="price-card fade-up">
+        <svg class="price-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="22" cy="12" r="8" stroke="#c9a84c" stroke-width="1.5"/>
+          <path d="M16 10 Q22 16 28 10" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M10 34c0-5.523 5.373-10 12-10s12 4.477 12 10" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M18 34l4-6 4 6" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <div class="price-service">Child Haircut</div>
+        <div class="price-desc">Patient, gentle cuts for the little ones aged 4 to 16. They'll walk out looking hensem too.</div>
+        <div>
+          <span class="price-amount">S$18</span>
+          <span class="price-note">Ages 4–16</span>
+        </div>
+      </div>
+
+      <div class="price-card fade-up">
+        <svg class="price-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M14 28 Q22 32 30 28" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 22 Q22 18 32 22" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M14 16 Q18 10 22 10 Q26 10 30 16" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="22" cy="8" r="3" stroke="#c9a84c" stroke-width="1.5"/>
+          <line x1="14" y1="35" x2="30" y2="35" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="price-service">Beard Trim</div>
+        <div class="price-desc">Shape, line, and clean up your beard to perfection. Straight razor edging included.</div>
+        <div>
+          <span class="price-amount">S$25</span>
+          <span class="price-note">+ razor edge</span>
+        </div>
+      </div>
+
+      <div class="price-card fade-up">
+        <svg class="price-icon" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 28 L32 16" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M12 16 L32 28" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+          <circle cx="12" cy="22" r="5" stroke="#c9a84c" stroke-width="1.5"/>
+          <circle cx="32" cy="22" r="5" stroke="#c9a84c" stroke-width="1.5"/>
+          <rect x="18" y="20" width="8" height="4" rx="2" fill="#c9a84c" opacity="0.4"/>
+          <line x1="22" y1="6" x2="22" y2="10" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <div class="price-service">Full Clean Shave</div>
+        <div class="price-desc">Traditional straight razor full-face shave with warm lather, hot towel, and aftercare balm.</div>
+        <div>
+          <span class="price-amount">S$30</span>
+          <span class="price-note">incl. towel</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Gallery ══ -->
+<section id="gallery">
+  <div class="container">
+    <div class="section-label">The Craft</div>
+    <h2 class="section-title">CUTS THAT<br><span>SPEAK</span></h2>
+
+    <div class="gallery-grid" style="margin-top:48px;">
+
+      <!-- Card 1 — Tall featured -->
+      <div class="gallery-card fade-up">
+        <svg viewBox="0 0 300 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+          <rect width="300" height="600" fill="#1a1a1d"/>
+          <!-- Dark dramatic barbershop scene -->
+          <rect y="400" width="300" height="200" fill="#141416"/>
+          <!-- Large mirror -->
+          <rect x="30" y="40" width="240" height="280" rx="4" fill="#111115" stroke="#c9a84c" stroke-width="1.5" stroke-opacity="0.6"/>
+          <!-- Mirror glow -->
+          <rect x="34" y="44" width="232" height="272" rx="2" fill="none" stroke="white" stroke-width="0.5" stroke-opacity="0.1"/>
+          <!-- Person's head in mirror -->
+          <circle cx="150" cy="160" r="55" fill="#c9a84c" opacity="0.85"/>
+          <!-- Fade gradient on sides of head -->
+          <ellipse cx="100" cy="185" rx="22" ry="30" fill="#141416" opacity="0.6"/>
+          <ellipse cx="200" cy="185" rx="22" ry="30" fill="#141416" opacity="0.6"/>
+          <!-- Hair on top -->
+          <ellipse cx="150" cy="120" rx="40" ry="20" fill="#8b6914" opacity="0.9"/>
+          <!-- Face features -->
+          <circle cx="137" cy="158" r="5" fill="#141416" opacity="0.8"/>
+          <circle cx="163" cy="158" r="5" fill="#141416" opacity="0.8"/>
+          <path d="M 137 178 Q 150 188 163 178" stroke="#141416" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Barber hands/scissors near head -->
+          <line x1="60" y1="130" x2="100" y2="145" stroke="#888" stroke-width="2"/>
+          <!-- Scissors -->
+          <line x1="60" y1="125" x2="80" y2="138" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <line x1="60" y1="138" x2="80" y2="125" stroke="#c9a84c" stroke-width="2" stroke-linecap="round"/>
+          <circle cx="60" cy="125" r="4" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+          <circle cx="60" cy="138" r="4" fill="none" stroke="#c9a84c" stroke-width="1.5"/>
+          <!-- Barber cape -->
+          <path d="M 90 215 Q 70 250 80 340 Q 150 360 220 340 Q 230 250 210 215 Q 180 230 150 230 Q 120 230 90 215Z" fill="#1a1a20"/>
+          <!-- Chair -->
+          <rect x="80" y="380" width="140" height="80" rx="6" fill="#2c2520"/>
+          <rect x="90" y="388" width="120" height="64" rx="4" fill="#3a3028"/>
+          <!-- Floor -->
+          <rect y="455" width="300" height="145" fill="#141416"/>
+          <!-- Floor reflection of light -->
+          <ellipse cx="150" cy="456" rx="80" ry="6" fill="#c9a84c" opacity="0.04"/>
+          <!-- Bottom text -->
+          <text x="150" y="530" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="22" fill="#c9a84c" letter-spacing="6" opacity="0.9">SKIN FADE</text>
+          <text x="150" y="555" text-anchor="middle" font-family="'DM Sans',sans-serif" font-size="10" fill="#666" letter-spacing="3">PRECISION CUT</text>
+        </svg>
+        <div class="gallery-overlay">
+          <div class="gallery-label">Signature Skin Fade</div>
+        </div>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="gallery-card fade-up">
+        <svg viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+          <rect width="300" height="290" fill="#1a1a1d"/>
+          <!-- Scissors close-up -->
+          <rect x="0" y="0" width="300" height="290" fill="#111115"/>
+          <!-- Large scissors illustration -->
+          <g transform="translate(150,145) rotate(35)">
+            <line x1="-90" y1="-20" x2="90" y2="20" stroke="#c9a84c" stroke-width="5" stroke-linecap="round"/>
+            <line x1="-90" y1="20" x2="90" y2="-20" stroke="#c9a84c" stroke-width="5" stroke-linecap="round"/>
+            <circle cx="-90" cy="-20" r="18" fill="none" stroke="#c9a84c" stroke-width="4"/>
+            <circle cx="-90" cy="20" r="18" fill="none" stroke="#c9a84c" stroke-width="4"/>
+            <!-- screw -->
+            <circle cx="0" cy="0" r="8" fill="#c9a84c" opacity="0.7"/>
+            <!-- Tips elongated -->
+            <line x1="90" y1="20" x2="120" y2="28" stroke="#e2c47a" stroke-width="4" stroke-linecap="round"/>
+            <line x1="90" y1="-20" x2="120" y2="-28" stroke="#e2c47a" stroke-width="4" stroke-linecap="round"/>
+          </g>
+          <!-- Hair strand lines -->
+          <path d="M0 80 Q 150 60 300 90" stroke="#8b6914" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <path d="M0 100 Q 150 80 300 110" stroke="#8b6914" stroke-width="1" fill="none" opacity="0.3"/>
+          <path d="M0 120 Q 150 100 300 130" stroke="#8b6914" stroke-width="0.8" fill="none" opacity="0.2"/>
+          <!-- Gold dust specks -->
+          <circle cx="60" cy="50" r="2" fill="#c9a84c" opacity="0.5"/>
+          <circle cx="180" cy="30" r="1.5" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="240" cy="80" r="2.5" fill="#c9a84c" opacity="0.3"/>
+          <circle cx="120" cy="240" r="2" fill="#c9a84c" opacity="0.4"/>
+          <circle cx="280" cy="220" r="1.5" fill="#c9a84c" opacity="0.35"/>
+          <text x="150" y="268" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="16" fill="#c9a84c" letter-spacing="5" opacity="0.8">THE TOOLS</text>
+        </svg>
+        <div class="gallery-overlay">
+          <div class="gallery-label">The Tools</div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="gallery-card fade-up">
+        <svg viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+          <rect width="300" height="290" fill="#111115"/>
+          <!-- Mid fade profile -->
+          <!-- Head side profile -->
+          <ellipse cx="150" cy="130" rx="70" ry="80" fill="#c9a84c" opacity="0.88"/>
+          <!-- Ear -->
+          <ellipse cx="215" cy="145" rx="14" ry="18" fill="#b8953e" opacity="0.9"/>
+          <!-- Fade gradient bottom sides -->
+          <rect x="80" y="170" width="140" height="90" fill="#111115" rx="4" opacity="0.5"/>
+          <!-- Hair on top styled -->
+          <ellipse cx="130" cy="62" rx="50" ry="22" fill="#6b5010" opacity="0.95"/>
+          <path d="M 90 70 Q 120 45 165 60 Q 180 55 190 68" fill="#8b6914" opacity="0.8"/>
+          <!-- Hair texture lines -->
+          <path d="M 95 65 Q 125 48 160 63" stroke="#c9a84c" stroke-width="1" fill="none" opacity="0.2"/>
+          <path d="M 100 72 Q 128 55 162 70" stroke="#c9a84c" stroke-width="0.8" fill="none" opacity="0.15"/>
+          <!-- Face feature (eye profile) -->
+          <path d="M 120 115 Q 128 110 138 115" stroke="#141416" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+          <!-- Nose profile -->
+          <path d="M 95 135 Q 88 145 92 155" stroke="#a07828" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <!-- Neckline -->
+          <rect x="110" y="200" width="80" height="30" rx="4" fill="#b8953e" opacity="0.6"/>
+          <!-- Cape edge -->
+          <path d="M70 210 Q150 220 230 210 L240 290 Q150 300 60 290Z" fill="#1a1a20" opacity="0.9"/>
+          <text x="150" y="275" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="15" fill="#c9a84c" letter-spacing="4" opacity="0.8">MID FADE</text>
+        </svg>
+        <div class="gallery-overlay">
+          <div class="gallery-label">Mid Fade Profile</div>
+        </div>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="gallery-card fade-up">
+        <svg viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+          <rect width="300" height="290" fill="#141416"/>
+          <!-- Hot towel shave scene -->
+          <!-- Steam effect lines -->
+          <path d="M 80 80 Q 85 60 80 40" stroke="white" stroke-width="1.5" fill="none" opacity="0.15" stroke-linecap="round"/>
+          <path d="M 100 85 Q 108 65 102 42" stroke="white" stroke-width="1.5" fill="none" opacity="0.12" stroke-linecap="round"/>
+          <path d="M 120 82 Q 128 58 120 36" stroke="white" stroke-width="1.5" fill="none" opacity="0.1" stroke-linecap="round"/>
+          <path d="M 180 80 Q 185 58 179 36" stroke="white" stroke-width="1.5" fill="none" opacity="0.15" stroke-linecap="round"/>
+          <path d="M 200 85 Q 208 63 201 40" stroke="white" stroke-width="1.5" fill="none" opacity="0.12" stroke-linecap="round"/>
+          <path d="M 220 82 Q 228 56 219 34" stroke="white" stroke-width="1.5" fill="none" opacity="0.1" stroke-linecap="round"/>
+          <!-- Bowl with steaming towel -->
+          <ellipse cx="150" cy="120" rx="90" ry="40" fill="#2a2520"/>
+          <ellipse cx="150" cy="118" rx="86" ry="36" fill="#1f1c18" stroke="#c9a84c" stroke-width="1" stroke-opacity="0.3"/>
+          <ellipse cx="150" cy="106" rx="75" ry="26" fill="#3a3028"/>
+          <!-- Towel visible rolled -->
+          <ellipse cx="150" cy="100" rx="60" ry="18" fill="#e8e0d0" opacity="0.7"/>
+          <path d="M 95 100 Q 150 88 205 100" stroke="white" stroke-width="1.5" fill="none" opacity="0.4"/>
+          <!-- Razor -->
+          <rect x="64" y="160" width="172" height="8" rx="4" fill="#888"/>
+          <rect x="64" y="160" width="20" height="8" rx="4" fill="#c9a84c"/>
+          <rect x="216" y="157" width="20" height="14" rx="3" fill="#555"/>
+          <!-- Shaving cream -->
+          <ellipse cx="100" cy="220" rx="28" ry="18" fill="#e8e8e8" opacity="0.6"/>
+          <path d="M 80 218 Q 100 208 120 218" fill="white" opacity="0.4"/>
+          <!-- Brush -->
+          <rect x="195" y="190" width="10" height="50" rx="4" fill="#8b6914"/>
+          <ellipse cx="200" cy="190" rx="16" ry="22" fill="#f0ece6" opacity="0.7"/>
+          <text x="150" y="268" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="15" fill="#c9a84c" letter-spacing="4" opacity="0.8">HOT TOWEL SHAVE</text>
+        </svg>
+        <div class="gallery-overlay">
+          <div class="gallery-label">Hot Towel Shave</div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="gallery-card fade-up">
+        <svg viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+          <rect width="300" height="290" fill="#0e0e0f"/>
+          <!-- Product lineup -->
+          <!-- Shelf -->
+          <rect x="10" y="200" width="280" height="6" rx="2" fill="#c9a84c" opacity="0.4"/>
+          <!-- Bottles of various shapes -->
+          <!-- Pomade tin -->
+          <rect x="28" y="155" width="44" height="44" rx="6" fill="#c9a84c" opacity="0.85"/>
+          <rect x="32" y="159" width="36" height="36" rx="4" fill="#b8953e"/>
+          <text x="50" y="182" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="9" fill="#141416" letter-spacing="1">POMADE</text>
+          <!-- Tall bottle -->
+          <rect x="90" y="130" width="28" height="70" rx="6" fill="#2a2520"/>
+          <rect x="92" y="132" width="24" height="66" rx="4" fill="#3a3028"/>
+          <rect x="96" y="136" width="16" height="6" rx="2" fill="#c9a84c" opacity="0.8"/>
+          <rect x="96" y="150" width="16" height="3" rx="1" fill="#c9a84c" opacity="0.4"/>
+          <rect x="96" y="158" width="16" height="3" rx="1" fill="#c9a84c" opacity="0.3"/>
+          <!-- Spray bottle -->
+          <rect x="132" y="140" width="24" height="60" rx="6" fill="#e8e0d0" opacity="0.5"/>
+          <rect x="148" y="130" width="16" height="18" rx="3" fill="#888" opacity="0.6"/>
+          <rect x="152" y="125" width="8" height="12" rx="2" fill="#555"/>
+          <!-- Clay jar -->
+          <rect x="172" y="162" width="38" height="38" rx="5" fill="#4a3c28"/>
+          <rect x="174" y="164" width="34" height="34" rx="4" fill="#5a4c38"/>
+          <text x="191" y="185" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="8" fill="#c9a84c" letter-spacing="1">CLAY</text>
+          <!-- Aftershave bottle -->
+          <rect x="224" y="148" width="24" height="52" rx="5" fill="#1a2535" opacity="0.9"/>
+          <rect x="228" y="136" width="16" height="18" rx="4" fill="#1a2535" opacity="0.7"/>
+          <rect x="230" y="155" width="12" height="30" fill="none" stroke="#c9a84c" stroke-width="0.5" stroke-opacity="0.5" rx="2"/>
+          <!-- Comb -->
+          <rect x="26" y="218" width="60" height="14" rx="2" fill="#c9a84c" opacity="0.7"/>
+          <line x1="32" y1="218" x2="32" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="38" y1="218" x2="38" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="44" y1="218" x2="44" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="50" y1="218" x2="50" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="56" y1="218" x2="56" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="62" y1="218" x2="62" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="68" y1="218" x2="68" y2="232" stroke="#141416" stroke-width="2"/>
+          <line x1="74" y1="218" x2="74" y2="232" stroke="#141416" stroke-width="2"/>
+          <!-- Clipper -->
+          <rect x="170" y="218" width="90" height="28" rx="6" fill="#2a2a2d"/>
+          <rect x="174" y="222" width="82" height="20" rx="4" fill="#333"/>
+          <rect x="180" y="218" width="68" height="6" rx="2" fill="#555"/>
+          <circle cx="248" cy="232" r="5" fill="#c9a84c" opacity="0.6"/>
+          <text x="150" y="270" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="15" fill="#c9a84c" letter-spacing="4" opacity="0.8">THE ARSENAL</text>
+        </svg>
+        <div class="gallery-overlay">
+          <div class="gallery-label">Premium Products</div>
+        </div>
+      </div>
+
+      <!-- Card 6 -->
+      <div class="gallery-card fade-up">
+        <svg viewBox="0 0 300 290" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;position:absolute;inset:0">
+          <rect width="300" height="290" fill="#141416"/>
+          <!-- Beard trim close-up -->
+          <!-- Face front view -->
+          <ellipse cx="150" cy="140" rx="80" ry="90" fill="#c9a84c" opacity="0.88"/>
+          <!-- Beard shape -->
+          <path d="M 85 165 Q 85 230 150 240 Q 215 230 215 165 Q 195 185 150 188 Q 105 185 85 165Z" fill="#6b5010" opacity="0.95"/>
+          <!-- Mustache -->
+          <path d="M 118 155 Q 135 148 150 152 Q 165 148 182 155" fill="#6b5010" opacity="0.9"/>
+          <!-- Cheek fade clean -->
+          <ellipse cx="92" cy="145" rx="20" ry="30" fill="#141416" opacity="0.3"/>
+          <ellipse cx="208" cy="145" rx="20" ry="30" fill="#141416" opacity="0.3"/>
+          <!-- Eyes -->
+          <ellipse cx="126" cy="120" rx="12" ry="7" fill="#141416" opacity="0.85"/>
+          <ellipse cx="174" cy="120" rx="12" ry="7" fill="#141416" opacity="0.85"/>
+          <circle cx="128" cy="120" r="4" fill="#1a3a5c"/>
+          <circle cx="176" cy="120" r="4" fill="#1a3a5c"/>
+          <circle cx="130" cy="118" r="1.5" fill="white" opacity="0.7"/>
+          <circle cx="178" cy="118" r="1.5" fill="white" opacity="0.7"/>
+          <!-- Nose -->
+          <ellipse cx="150" cy="140" rx="10" ry="14" fill="#b8953e" opacity="0.5"/>
+          <circle cx="144" cy="148" r="5" fill="#a07828" opacity="0.4"/>
+          <circle cx="156" cy="148" r="5" fill="#a07828" opacity="0.4"/>
+          <!-- Eyebrows -->
+          <path d="M 112 108 Q 126 103 140 108" stroke="#6b5010" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M 160 108 Q 174 103 188 108" stroke="#6b5010" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <!-- Straight razor edge line on beard -->
+          <line x1="72" y1="175" x2="100" y2="168" stroke="#c9a84c" stroke-width="2" stroke-linecap="round" opacity="0.8"/>
+          <text x="150" y="274" text-anchor="middle" font-family="'Bebas Neue',sans-serif" font-size="15" fill="#c9a84c" letter-spacing="4" opacity="0.8">BEARD SCULPT</text>
+        </svg>
+        <div class="gallery-overlay">
+          <div class="gallery-label">Beard Sculpting</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ══ Reviews ══ -->
+<section id="reviews">
+  <div class="container">
+    <div class="reviews-header">
+      <div>
+        <div class="section-label">What They're Saying</div>
+        <h2 class="section-title">REAL<br><span>REVIEWS</span></h2>
+      </div>
+      <div class="google-badge">
+        ★ 4.9 · 2,297+ Google Reviews
+      </div>
+    </div>
+
+    <div class="review-grid">
+      <div class="review-card fade-up">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">"Johan is a very meticulous and friendly barber. The entire experience felt very relaxing and therapeutic, and I liked the haircut! The price is a bit on the steep side, but the service was fantastic. Will definitely go back again."</p>
+        <div class="review-author">
+          <div class="review-avatar">MF</div>
+          <div>
+            <div class="review-name">Muhammad F.</div>
+            <div class="review-via">Google Review · Bedok</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">"Came in sweaty due to the hot weather, and Johan was very kind to dry me off with the hairdryer! He was meticulous with his cuts and gentle when adjusting my head. My mid fade and hairstyling also turned out to be very on point!"</p>
+        <div class="review-author">
+          <div class="review-avatar">RK</div>
+          <div>
+            <div class="review-name">Ryan K.</div>
+            <div class="review-via">Google Review · Tampines</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="review-card fade-up">
+        <div class="review-stars">
+          <span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span><span class="star">★</span>
+        </div>
+        <p class="review-text">"Been coming here for years. Both Asyraf and Zack are professional, deliberate, gentle, and welcoming with high attention to detail. Best neighbourhood barber in Bedok — no contest. This place deserves every star."</p>
+        <div class="review-author">
+          <div class="review-avatar">JL</div>
+          <div>
+            <div class="review-name">Joel L.</div>
+            <div class="review-via">Google Review · Bedok North</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Contact / Booking ══ -->
+<section id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="contact-info fade-up">
+        <div class="section-label">Find Us</div>
+        <h2 class="section-title">BOOK YOUR<br><span>HENSEM</span><br>TIME</h2>
+        <p>All appointments are strictly by booking — no walk-ins. WhatsApp is the fastest way to reach us and lock in your slot.</p>
+
+        <div class="contact-details">
+          <div class="contact-row">
+            <div class="contact-icon">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M9 1C6.24 1 4 3.24 4 6c0 3.75 5 11 5 11s5-7.25 5-11c0-2.76-2.24-5-5-5zm0 6.5A1.5 1.5 0 1 1 9 4a1.5 1.5 0 0 1 0 3.5z" fill="#c9a84c"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">Address</div>
+              <div class="contact-detail-val">Blk 537 Bedok North St 3, #01-511<br>Singapore 460537</div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 3a1 1 0 0 1 1-1h1.5a1 1 0 0 1 .95.68l.8 2.4a1 1 0 0 1-.23 1.02L6 7.1c.9 1.7 2.2 3 3.9 3.9l1-1.02a1 1 0 0 1 1.02-.23l2.4.8A1 1 0 0 1 15 11.5V13a1 1 0 0 1-1 1C7.27 14 3 9.73 3 5V3z" fill="#c9a84c"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">WhatsApp / Phone</div>
+              <div class="contact-detail-val"><a href="https://wa.me/6594225895">+65 9422 5895</a></div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M3 4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V4zm1 0v.5l5 3.5 5-3.5V4H4zm10 2.5L9 10 4 6.5V14h10V6.5z" fill="#c9a84c"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">Email</div>
+              <div class="contact-detail-val"><a href="mailto:limpehbarbershop@gmail.com">limpehbarbershop@gmail.com</a></div>
+            </div>
+          </div>
+          <div class="contact-row">
+            <div class="contact-icon">
+              <svg viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="9" cy="9" r="6" stroke="#c9a84c" stroke-width="1.5"/>
+                <path d="M9 5v4l3 2" stroke="#c9a84c" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="contact-detail-label">Hours</div>
+              <div class="contact-detail-val">Mon – Fri: 12pm – 9pm<br>Sat – Sun: 11am – 7pm · Tue: Closed</div>
+            </div>
+          </div>
+        </div>
+
+        <a href="https://wa.me/6594225895" target="_blank" class="whatsapp-btn">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/></svg>
+          Message Us on WhatsApp
+        </a>
+      </div>
+
+      <div class="contact-form-wrap fade-up">
+        <h3>DROP A MESSAGE</h3>
+        <form>
+          <div class="form-group">
+            <label>Your Name</label>
+            <input type="text" placeholder="e.g. Ahmad Razif">
+          </div>
+          <div class="form-group">
+            <label>Phone Number</label>
+            <input type="tel" placeholder="+65 9XXX XXXX">
+          </div>
+          <div class="form-group">
+            <label>Service</label>
+            <select>
+              <option value="">Select a service...</option>
+              <option>Haircut + Hairwash — S$30</option>
+              <option>Haircut + Hot Towel Massage — S$25</option>
+              <option>Student / NSF Rate — S$25</option>
+              <option>Child Haircut (4–16) — S$18</option>
+              <option>Beard Trim — S$25</option>
+              <option>Full Clean Shave — S$30</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>Preferred Date & Time</label>
+            <input type="text" placeholder="e.g. Saturday 15 June, 2pm">
+          </div>
+          <div class="form-group">
+            <label>Any Notes?</label>
+            <textarea placeholder="Style preferences, reference photos, anything specific..."></textarea>
+          </div>
+          <button type="submit" class="form-submit">Send Booking Request</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ Footer ══ -->
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">LIM<span>PEH</span> BARBERSHOP</div>
+        <div class="footer-tagline">"Hensem like your limpeh" — since 2015</div>
+      </div>
+
+      <div class="footer-links">
+        <h4>Navigation</h4>
+        <ul>
+          <li><a href="#about">Our Story</a></li>
+          <li><a href="#services">Services & Pricing</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#reviews">Reviews</a></li>
+          <li><a href="#contact">Book Now</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-hours">
+        <h4>Opening Hours</h4>
+        <div class="hours-row"><span class="hours-day">Monday</span><span class="hours-time">12pm – 9pm</span></div>
+        <div class="hours-row"><span class="hours-day">Tuesday</span><span class="hours-time" style="color:var(--muted)">Closed</span></div>
+        <div class="hours-row"><span class="hours-day">Wednesday – Friday</span><span class="hours-time">12pm – 9pm</span></div>
+        <div class="hours-row"><span class="hours-day">Saturday – Sunday</span><span class="hours-time">11am – 7pm</span></div>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copy">© 2026 Limpeh Barbershop · Blk 537 Bedok North St 3, Singapore 460537</div>
+      <div class="footer-socials">
+        <a href="https://www.instagram.com/limpehbarbershop/" target="_blank" title="Instagram">IG</a>
+        <a href="https://www.facebook.com/Limpehbarbershop/" target="_blank" title="Facebook">FB</a>
+        <a href="https://wa.me/6594225895" target="_blank" title="WhatsApp">WA</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let mouseX = 0, mouseY = 0;
+  let ringX = 0, ringY = 0;
+  document.addEventListener('mousemove', e => {
+    mouseX = e.clientX; mouseY = e.clientY;
+    dot.style.left = mouseX + 'px';
+    dot.style.top = mouseY + 'px';
+  });
+  function animateRing() {
+    ringX += (mouseX - ringX) * 0.12;
+    ringY += (mouseY - ringY) * 0.12;
+    ring.style.left = ringX + 'px';
+    ring.style.top = ringY + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  // Hover effect
+  document.querySelectorAll('a, button, .price-card, .gallery-card, .review-card').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+      ring.style.opacity = '0.8';
+    });
+    el.addEventListener('mouseleave', () => {
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+      ring.style.opacity = '0.6';
+    });
+  });
+
+  // Progress bar
+  const progressBar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const scrollTop = document.documentElement.scrollTop;
+    const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+    const pct = (scrollTop / scrollHeight) * 100;
+    progressBar.style.width = pct + '%';
+  });
+
+  // Nav scroll
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) navbar.classList.add('scrolled');
+    else navbar.classList.remove('scrolled');
+  });
+
+  // Scroll animations
+  const fadeEls = document.querySelectorAll('.fade-up');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  fadeEls.forEach(el => observer.observe(el));
+
+  // Form submit
+  const form = document.querySelector('form');
+  if (form) {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const btn = form.querySelector('.form-submit');
+      btn.textContent = 'Message Sent! ✓';
+      btn.style.background = '#3a7d44';
+      setTimeout(() => {
+        btn.textContent = 'Send Booking Request';
+        btn.style.background = '';
+        form.reset();
+      }, 3000);
+    });
+  }
+</script>
+</body>
+</html>
