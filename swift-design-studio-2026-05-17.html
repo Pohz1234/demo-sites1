@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Swift Design Studio — Japandi & Minimalist Interior Design Singapore</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ivory: #f6f1eb;
+    --sand: #e8ddd2;
+    --clay: #c4aa93;
+    --warm-brown: #7a6651;
+    --dark: #231e18;
+    --dark-mid: #2e271f;
+    --text: #3a3028;
+    --sage: #8a9e8c;
+    --sage-light: #b8ccba;
+    --cream: #faf7f3;
+    --font-display: 'Cormorant Garamond', Georgia, serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--ivory);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    line-height: 1.7;
+    cursor: none;
+    overflow-x: hidden;
+  }
+
+  /* ── SCROLL PROGRESS ── */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    width: 0%;
+    background: var(--sage);
+    z-index: 9999;
+    transition: width 0.1s linear;
+  }
+
+  /* ── CURSOR ── */
+  #cursor-dot {
+    width: 7px; height: 7px;
+    background: var(--warm-brown);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s;
+  }
+  #cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--warm-brown);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9997;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: multiply;
+    transition: transform 0.18s ease, width 0.2s, height 0.2s;
+  }
+  body:has(a:hover) #cursor-ring,
+  body:has(button:hover) #cursor-ring {
+    width: 56px; height: 56px;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 900;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 24px 48px;
+    background: transparent;
+    transition: background 0.4s, padding 0.4s;
+  }
+  nav.scrolled {
+    background: rgba(246,241,235,0.94);
+    backdrop-filter: blur(10px);
+    padding: 16px 48px;
+    border-bottom: 1px solid var(--sand);
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    color: var(--dark);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--warm-brown); }
+  .nav-links {
+    display: flex;
+    gap: 36px;
+    list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    font-weight: 400;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--warm-brown); }
+  .nav-cta {
+    background: var(--dark);
+    color: var(--ivory) !important;
+    padding: 10px 24px;
+    border-radius: 2px;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--warm-brown) !important; }
+  .nav-hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+  .nav-hamburger span { display: block; width: 24px; height: 1px; background: var(--dark); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: 80px;
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 56px 80px 80px;
+  }
+  .hero-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-brown);
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .hero-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--warm-brown);
+  }
+  .hero-h1 {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 5vw, 5.2rem);
+    font-weight: 300;
+    line-height: 1.1;
+    color: var(--dark);
+    margin-bottom: 28px;
+  }
+  .hero-h1 em { font-style: italic; color: var(--warm-brown); }
+  .hero-sub {
+    font-size: 0.95rem;
+    color: #6b5f54;
+    line-height: 1.8;
+    max-width: 420px;
+    margin-bottom: 48px;
+  }
+  .hero-actions {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    background: var(--dark);
+    color: var(--ivory);
+    padding: 14px 32px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border: none;
+    cursor: none;
+    text-decoration: none;
+    transition: background 0.25s;
+    display: inline-block;
+  }
+  .btn-primary:hover { background: var(--warm-brown); }
+  .btn-ghost {
+    border: 1px solid var(--clay);
+    color: var(--text);
+    padding: 14px 32px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: transparent;
+    cursor: none;
+    text-decoration: none;
+    transition: border-color 0.25s, color 0.25s;
+    display: inline-block;
+  }
+  .btn-ghost:hover { border-color: var(--warm-brown); color: var(--warm-brown); }
+  .hero-stats {
+    display: flex;
+    gap: 40px;
+    margin-top: 56px;
+    padding-top: 40px;
+    border-top: 1px solid var(--sand);
+  }
+  .stat-item {}
+  .stat-num {
+    font-family: var(--font-display);
+    font-size: 2.4rem;
+    font-weight: 300;
+    color: var(--dark);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--warm-brown);
+    margin-top: 4px;
+  }
+  .hero-right {
+    background: var(--sand);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-right::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, #e8ddd2 0%, #d6c8b8 100%);
+  }
+  .hero-svg-wrap {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+
+  /* ── MARQUEE ── */
+  .marquee-wrap {
+    background: var(--dark);
+    color: var(--clay);
+    padding: 16px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .marquee-inner {
+    display: inline-flex;
+    animation: marquee 28s linear infinite;
+  }
+  .marquee-inner span {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 0 32px;
+  }
+  .marquee-inner span.dot {
+    color: var(--sage);
+    padding: 0;
+    font-size: 1rem;
+  }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ── SECTION COMMONS ── */
+  section { padding: 120px 80px; }
+  .section-eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--warm-brown);
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-eyebrow::before {
+    content: '';
+    display: block;
+    width: 32px;
+    height: 1px;
+    background: var(--warm-brown);
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 4vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--dark);
+    margin-bottom: 24px;
+  }
+  .section-title em { font-style: italic; color: var(--warm-brown); }
+  .section-sub {
+    font-size: 0.95rem;
+    color: #6b5f54;
+    line-height: 1.8;
+    max-width: 560px;
+  }
+
+  /* ── ABOUT ── */
+  #about {
+    background: var(--cream);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .about-badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .badge {
+    border: 1px solid var(--clay);
+    color: var(--warm-brown);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 7px 16px;
+    border-radius: 2px;
+  }
+  .about-visual {
+    position: relative;
+    height: 480px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .about-visual-bg {
+    position: absolute;
+    inset: 0;
+    background: var(--sand);
+    border-radius: 2px;
+  }
+
+  /* ── PROJECTS ── */
+  #projects { background: var(--ivory); }
+  .projects-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 60px;
+  }
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+  }
+  .project-card {
+    position: relative;
+    background: var(--sand);
+    overflow: hidden;
+    aspect-ratio: 3/4;
+    cursor: none;
+  }
+  .project-card:nth-child(1) { grid-column: span 1; grid-row: span 2; aspect-ratio: unset; min-height: 600px; }
+  .project-card-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  .project-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(35,30,24,0.82) 0%, transparent 55%);
+    opacity: 0;
+    transition: opacity 0.4s;
+    z-index: 2;
+  }
+  .project-card:hover .project-overlay { opacity: 1; }
+  .project-info {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    padding: 28px;
+    z-index: 3;
+    transform: translateY(8px);
+    opacity: 0;
+    transition: transform 0.35s ease, opacity 0.35s ease;
+  }
+  .project-card:hover .project-info { transform: translateY(0); opacity: 1; }
+  .project-style {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--clay);
+    margin-bottom: 6px;
+  }
+  .project-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .project-loc {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.65);
+    margin-top: 4px;
+  }
+  .project-always-title {
+    position: absolute;
+    bottom: 20px;
+    left: 24px;
+    z-index: 2;
+  }
+  .project-always-style {
+    font-size: 0.65rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--warm-brown);
+    margin-bottom: 4px;
+  }
+  .project-always-name {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 400;
+    color: var(--dark);
+  }
+
+  /* ── PROCESS ── */
+  #process {
+    background: var(--dark);
+    color: var(--ivory);
+  }
+  #process .section-title { color: var(--ivory); }
+  #process .section-eyebrow { color: var(--clay); }
+  #process .section-eyebrow::before { background: var(--clay); }
+  .process-steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+    margin-top: 64px;
+  }
+  .process-step {
+    border-top: 1px solid rgba(196,170,147,0.3);
+    padding-top: 32px;
+  }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    font-weight: 300;
+    color: var(--clay);
+    opacity: 0.5;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .step-title {
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 400;
+    color: var(--sand);
+    margin-bottom: 12px;
+  }
+  .step-desc {
+    font-size: 0.88rem;
+    color: rgba(232,221,210,0.65);
+    line-height: 1.8;
+  }
+
+  /* ── TESTIMONIALS ── */
+  #testimonials {
+    background: var(--dark-mid);
+    color: var(--ivory);
+  }
+  #testimonials .section-title { color: var(--ivory); }
+  #testimonials .section-eyebrow { color: var(--clay); }
+  #testimonials .section-eyebrow::before { background: var(--clay); }
+  .testi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    margin-top: 56px;
+  }
+  .testi-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(196,170,147,0.12);
+    padding: 44px 36px;
+    transition: background 0.3s;
+  }
+  .testi-card:hover { background: rgba(255,255,255,0.07); }
+  .testi-quote-mark {
+    font-family: var(--font-display);
+    font-size: 4rem;
+    color: var(--clay);
+    opacity: 0.4;
+    line-height: 1;
+    margin-bottom: 20px;
+  }
+  .testi-text {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: rgba(232,221,210,0.9);
+    line-height: 1.75;
+    margin-bottom: 28px;
+  }
+  .testi-divider {
+    width: 32px;
+    height: 1px;
+    background: var(--clay);
+    margin-bottom: 20px;
+    opacity: 0.5;
+  }
+  .testi-author { font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--clay); }
+  .testi-project { font-size: 0.75rem; color: rgba(196,170,147,0.5); margin-top: 4px; }
+
+  /* ── CONTACT ── */
+  #contact {
+    background: var(--sand);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .contact-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-top: 40px;
+  }
+  .contact-item-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--warm-brown);
+    margin-bottom: 4px;
+  }
+  .contact-item-val {
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--dark);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .contact-item-val:hover { color: var(--warm-brown); }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--warm-brown);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    width: 100%;
+    background: rgba(255,255,255,0.6);
+    border: 1px solid var(--clay);
+    padding: 14px 16px;
+    font-family: var(--font-body);
+    font-size: 0.9rem;
+    color: var(--dark);
+    outline: none;
+    transition: border-color 0.2s;
+    border-radius: 0;
+    -webkit-appearance: none;
+  }
+  .form-group input:focus,
+  .form-group textarea:focus,
+  .form-group select:focus { border-color: var(--warm-brown); }
+  .form-group textarea { min-height: 120px; resize: vertical; }
+  .form-submit {
+    width: 100%;
+    background: var(--dark);
+    color: var(--ivory);
+    border: none;
+    padding: 16px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: none;
+    transition: background 0.25s;
+  }
+  .form-submit:hover { background: var(--warm-brown); }
+
+  /* ── FOOTER ── */
+  footer {
+    background: var(--dark);
+    color: rgba(232,221,210,0.5);
+    padding: 60px 80px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+  .footer-logo {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 500;
+    color: var(--ivory);
+    letter-spacing: 0.04em;
+  }
+  .footer-logo span { color: var(--clay); }
+  footer p { font-size: 0.78rem; letter-spacing: 0.06em; }
+  .footer-links { display: flex; gap: 24px; }
+  .footer-links a {
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(196,170,147,0.6);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--clay); }
+
+  /* ── FADE-UP ANIMATION ── */
+  .fade-up {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .fade-up.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .fade-up-delay-1 { transition-delay: 0.1s; }
+  .fade-up-delay-2 { transition-delay: 0.2s; }
+  .fade-up-delay-3 { transition-delay: 0.3s; }
+
+  /* ── MOBILE ── */
+  @media (max-width: 900px) {
+    nav { padding: 20px 24px; }
+    nav.scrolled { padding: 14px 24px; }
+    .nav-links { display: none; }
+    .nav-hamburger { display: flex; }
+    section { padding: 80px 24px; }
+    #hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 100px 24px 60px; }
+    .hero-right { min-height: 300px; }
+    .hero-stats { gap: 24px; flex-wrap: wrap; }
+    #about { grid-template-columns: 1fr; gap: 40px; }
+    .about-visual { height: 280px; }
+    .projects-header { flex-direction: column; align-items: flex-start; gap: 24px; }
+    .projects-grid { grid-template-columns: 1fr 1fr; }
+    .project-card:nth-child(1) { grid-column: span 2; grid-row: span 1; min-height: 300px; }
+    .process-steps { grid-template-columns: 1fr 1fr; }
+    .testi-grid { grid-template-columns: 1fr; }
+    #contact { grid-template-columns: 1fr; gap: 40px; }
+    footer { padding: 40px 24px; flex-direction: column; align-items: flex-start; }
+  }
+  @media (max-width: 600px) {
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card:nth-child(1) { grid-column: span 1; }
+    .process-steps { grid-template-columns: 1fr; }
+    #cursor-dot, #cursor-ring { display: none; }
+    body { cursor: auto; }
+    .btn-primary, .btn-ghost, .form-submit { cursor: pointer; }
+  }
+</style>
+</head>
+<body>
+
+<div id="progress-bar"></div>
+<div id="cursor-dot"></div>
+<div id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">Swift <span>Design Studio</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#process">Process</a></li>
+    <li><a href="#testimonials">Reviews</a></li>
+    <li><a href="#contact" class="nav-cta">Get a Quote</a></li>
+  </ul>
+  <div class="nav-hamburger" onclick="this.classList.toggle('open')">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow fade-up">Singapore's Japandi Specialists</div>
+    <h1 class="hero-h1 fade-up fade-up-delay-1">
+      Spaces That<br><em>Breathe</em> &<br>Belong to You
+    </h1>
+    <p class="hero-sub fade-up fade-up-delay-2">
+      HDB renovations and condo interiors crafted with Japandi calm, Wabi-Sabi warmth, and the kind of thoughtful detail that lasts a lifetime.
+    </p>
+    <div class="hero-actions fade-up fade-up-delay-3">
+      <a href="#contact" class="btn-primary">Start Your Reno</a>
+      <a href="#projects" class="btn-ghost">See Our Work</a>
+    </div>
+    <div class="hero-stats fade-up">
+      <div class="stat-item">
+        <div class="stat-num">5+</div>
+        <div class="stat-label">Years Building Homes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">200+</div>
+        <div class="stat-label">Projects Completed</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">96%</div>
+        <div class="stat-label">Client Satisfaction</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-svg-wrap">
+      <!-- Japandi living room illustration -->
+      <svg viewBox="0 0 520 580" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:500px;height:auto;">
+        <!-- floor -->
+        <rect x="0" y="400" width="520" height="180" fill="#c9b8a5" rx="0"/>
+        <!-- wood floor planks -->
+        <rect x="0" y="400" width="520" height="8" fill="#b8a492" opacity="0.5"/>
+        <line x1="0" y1="420" x2="520" y2="420" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+        <line x1="0" y1="440" x2="520" y2="440" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+        <line x1="0" y1="460" x2="520" y2="460" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+        <line x1="130" y1="400" x2="130" y2="580" stroke="#b8a492" stroke-width="1" opacity="0.25"/>
+        <line x1="260" y1="400" x2="260" y2="580" stroke="#b8a492" stroke-width="1" opacity="0.25"/>
+        <line x1="390" y1="400" x2="390" y2="580" stroke="#b8a492" stroke-width="1" opacity="0.25"/>
+        <!-- back wall -->
+        <rect x="0" y="0" width="520" height="420" fill="#e8ddd2"/>
+        <!-- window - shoji inspired -->
+        <rect x="120" y="30" width="280" height="340" fill="#f5f0e8" rx="1"/>
+        <rect x="120" y="30" width="280" height="340" fill="none" stroke="#d4c4b0" stroke-width="3"/>
+        <!-- shoji grid -->
+        <line x1="260" y1="30" x2="260" y2="370" stroke="#d4c4b0" stroke-width="2"/>
+        <line x1="190" y1="30" x2="190" y2="370" stroke="#d4c4b0" stroke-width="1.5"/>
+        <line x1="330" y1="30" x2="330" y2="370" stroke="#d4c4b0" stroke-width="1.5"/>
+        <line x1="120" y1="130" x2="400" y2="130" stroke="#d4c4b0" stroke-width="2"/>
+        <line x1="120" y1="200" x2="400" y2="200" stroke="#d4c4b0" stroke-width="1.5"/>
+        <line x1="120" y1="260" x2="400" y2="260" stroke="#d4c4b0" stroke-width="1.5"/>
+        <line x1="120" y1="320" x2="400" y2="320" stroke="#d4c4b0" stroke-width="1.5"/>
+        <!-- soft light through window -->
+        <rect x="120" y="30" width="280" height="340" fill="rgba(245,230,200,0.22)"/>
+        <!-- sofa -->
+        <rect x="50" y="340" width="320" height="80" fill="#c4aa93" rx="4"/>
+        <rect x="50" y="310" width="320" height="38" fill="#b39882" rx="3"/>
+        <!-- sofa back cushions -->
+        <rect x="60" y="318" width="90" height="28" fill="#c4aa93" rx="3" opacity="0.8"/>
+        <rect x="162" y="318" width="90" height="28" fill="#c4aa93" rx="3" opacity="0.8"/>
+        <rect x="264" y="318" width="98" height="28" fill="#c4aa93" rx="3" opacity="0.8"/>
+        <!-- sofa seat cushions -->
+        <rect x="62" y="348" width="88" height="30" fill="#cbb49f" rx="2" opacity="0.8"/>
+        <rect x="162" y="348" width="88" height="30" fill="#cbb49f" rx="2" opacity="0.8"/>
+        <rect x="262" y="348" width="96" height="30" fill="#cbb49f" rx="2" opacity="0.8"/>
+        <!-- sofa armrests -->
+        <rect x="50" y="332" width="20" height="88" fill="#a8896e" rx="2"/>
+        <rect x="350" y="332" width="20" height="88" fill="#a8896e" rx="2"/>
+        <!-- sofa legs -->
+        <rect x="62" y="415" width="10" height="20" fill="#8a6e54"/>
+        <rect x="342" y="415" width="10" height="20" fill="#8a6e54"/>
+        <!-- throw pillow on sofa -->
+        <rect x="200" y="328" width="50" height="36" fill="#8a9e8c" rx="2" transform="rotate(-5 225 346)"/>
+        <!-- coffee table -->
+        <rect x="130" y="420" width="200" height="70" fill="#9c8068" rx="2"/>
+        <rect x="130" y="420" width="200" height="8" fill="#b89a7e" rx="1"/>
+        <!-- table legs -->
+        <rect x="138" y="488" width="8" height="22" fill="#7a6251"/>
+        <rect x="314" y="488" width="8" height="22" fill="#7a6251"/>
+        <!-- table decor - tray + vase -->
+        <rect x="155" y="413" width="80" height="12" fill="#c4aa93" rx="1" opacity="0.6"/>
+        <ellipse cx="228" cy="413" rx="12" ry="16" fill="#8a9e8c"/>
+        <ellipse cx="228" cy="397" rx="4" ry="4" fill="#6b7e6d"/>
+        <!-- plant stems -->
+        <line x1="224" y1="397" x2="218" y2="375" stroke="#6b7e6d" stroke-width="1.5"/>
+        <ellipse cx="216" cy="373" rx="7" ry="4" fill="#8a9e8c" transform="rotate(-20 216 373)"/>
+        <line x1="228" y1="397" x2="238" y2="378" stroke="#6b7e6d" stroke-width="1.5"/>
+        <ellipse cx="240" cy="375" rx="6" ry="4" fill="#a0b5a2" transform="rotate(15 240 375)"/>
+        <!-- floor lamp -->
+        <line x1="448" y1="400" x2="448" y2="140" stroke="#7a6251" stroke-width="4"/>
+        <ellipse cx="448" cy="140" rx="35" ry="22" fill="#e8ddd2" stroke="#c4aa93" stroke-width="2"/>
+        <ellipse cx="448" cy="400" rx="20" ry="4" fill="#7a6251" opacity="0.4"/>
+        <!-- lamp glow -->
+        <ellipse cx="448" cy="175" rx="60" ry="40" fill="rgba(255,230,180,0.18)"/>
+        <!-- side table -->
+        <rect x="400" y="370" width="60" height="45" fill="#b89a7e" rx="2"/>
+        <rect x="408" y="362" width="44" height="12" fill="#c4aa93" rx="1"/>
+        <!-- book stack on side table -->
+        <rect x="414" y="352" width="32" height="8" fill="#8a9e8c" rx="1"/>
+        <rect x="416" y="345" width="28" height="8" fill="#c4aa93" rx="1"/>
+        <!-- tv unit hint far left -->
+        <rect x="0" y="355" width="45" height="50" fill="#9c8068" rx="1" opacity="0.6"/>
+        <!-- rug under coffee table -->
+        <ellipse cx="230" cy="445" rx="130" ry="38" fill="#b8a07c" opacity="0.28"/>
+        <!-- decorative dots / grain texture on wall -->
+        <circle cx="80" cy="80" r="1.5" fill="#c4aa93" opacity="0.3"/>
+        <circle cx="460" cy="60" r="1.5" fill="#c4aa93" opacity="0.3"/>
+        <circle cx="470" cy="300" r="1.5" fill="#c4aa93" opacity="0.3"/>
+        <circle cx="75" cy="280" r="1.5" fill="#c4aa93" opacity="0.3"/>
+        <!-- baseboard -->
+        <rect x="0" y="395" width="520" height="8" fill="#d4c4b0" opacity="0.5"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-inner">
+    <span>Japandi</span><span class="dot">·</span>
+    <span>Wabi-Sabi</span><span class="dot">·</span>
+    <span>Tampines</span><span class="dot">·</span>
+    <span>Woodlands</span><span class="dot">·</span>
+    <span>Minimalist Living</span><span class="dot">·</span>
+    <span>Punggol</span><span class="dot">·</span>
+    <span>Scandinavian</span><span class="dot">·</span>
+    <span>Bishan</span><span class="dot">·</span>
+    <span>HDB BTO</span><span class="dot">·</span>
+    <span>Bartley</span><span class="dot">·</span>
+    <span>Condo Renovation</span><span class="dot">·</span>
+    <span>Tengah</span><span class="dot">·</span>
+    <span>Dark Japandi</span><span class="dot">·</span>
+    <span>Pasir Ris</span><span class="dot">·</span>
+    <span>Japandi</span><span class="dot">·</span>
+    <span>Wabi-Sabi</span><span class="dot">·</span>
+    <span>Tampines</span><span class="dot">·</span>
+    <span>Woodlands</span><span class="dot">·</span>
+    <span>Minimalist Living</span><span class="dot">·</span>
+    <span>Punggol</span><span class="dot">·</span>
+    <span>Scandinavian</span><span class="dot">·</span>
+    <span>Bishan</span><span class="dot">·</span>
+    <span>HDB BTO</span><span class="dot">·</span>
+    <span>Bartley</span><span class="dot">·</span>
+    <span>Condo Renovation</span><span class="dot">·</span>
+    <span>Tengah</span><span class="dot">·</span>
+    <span>Dark Japandi</span><span class="dot">·</span>
+    <span>Pasir Ris</span><span class="dot">·</span>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div>
+    <div class="section-eyebrow fade-up">Who We Are</div>
+    <h2 class="section-title fade-up fade-up-delay-1">Interior Design<br>with <em>Soul</em> & Purpose</h2>
+    <p class="section-sub fade-up fade-up-delay-2">
+      We're a Singapore-based interior design studio specialising in Japandi, Wabi-Sabi, and Scandinavian-inspired homes. Our team — Willy, Kok Leong, Alan, and Jeffery — brings warmth and precision to every project, from BTO flats in Tampines to resale condos in the city fringe.
+    </p>
+    <p class="section-sub fade-up fade-up-delay-2" style="margin-top:16px;">
+      We are HDB Licensed, bizSAFE certified, and members of the Renovation Contractors & Material Suppliers Association (RCMA). Every home we build is managed in-house — no subcontracting, no surprises.
+    </p>
+    <div class="about-badges fade-up fade-up-delay-3">
+      <span class="badge">HDB Licensed</span>
+      <span class="badge">bizSAFE Level 3</span>
+      <span class="badge">RCMA Member</span>
+      <span class="badge">Top 50 ID Award 2020/21</span>
+      <span class="badge">Top 100 SME 2021/22</span>
+    </div>
+  </div>
+  <div class="about-visual fade-up fade-up-delay-2">
+    <div class="about-visual-bg"></div>
+    <!-- About illustration: cosy reading nook -->
+    <svg viewBox="0 0 400 440" xmlns="http://www.w3.org/2000/svg" style="position:relative;width:90%;max-width:380px;">
+      <!-- wall -->
+      <rect x="0" y="0" width="400" height="440" fill="#e0d4c4"/>
+      <!-- alcove / nook wall -->
+      <rect x="40" y="30" width="320" height="360" fill="#ede5d8" rx="4"/>
+      <!-- shelf top -->
+      <rect x="40" y="30" width="320" height="14" fill="#c4aa93"/>
+      <!-- shelf bottom -->
+      <rect x="40" y="376" width="320" height="14" fill="#c4aa93"/>
+      <!-- books on shelf -->
+      <rect x="60" y="44" width="22" height="90" fill="#8a9e8c" rx="1"/>
+      <rect x="84" y="44" width="18" height="90" fill="#c4aa93" rx="1"/>
+      <rect x="104" y="44" width="24" height="90" fill="#9c8068" rx="1"/>
+      <rect x="130" y="44" width="16" height="90" fill="#8a9e8c" rx="1" opacity="0.7"/>
+      <rect x="148" y="56" width="20" height="78" fill="#c4aa93" rx="1" opacity="0.6"/>
+      <!-- small plant on shelf -->
+      <rect x="310" y="114" width="24" height="20" fill="#9c8068" rx="2"/>
+      <ellipse cx="322" cy="106" rx="18" ry="22" fill="#8a9e8c"/>
+      <ellipse cx="315" cy="100" rx="8" ry="12" fill="#8a9e8c" transform="rotate(-15 315 100)"/>
+      <ellipse cx="330" cy="102" rx="7" ry="10" fill="#a0b5a2" transform="rotate(12 330 102)"/>
+      <!-- window in nook -->
+      <rect x="120" y="140" width="160" height="160" fill="#f5f0e8" rx="1"/>
+      <rect x="120" y="140" width="160" height="160" fill="none" stroke="#d4c4b0" stroke-width="2.5"/>
+      <line x1="200" y1="140" x2="200" y2="300" stroke="#d4c4b0" stroke-width="1.5"/>
+      <line x1="120" y1="220" x2="280" y2="220" stroke="#d4c4b0" stroke-width="1.5"/>
+      <!-- warm light -->
+      <rect x="120" y="140" width="160" height="160" fill="rgba(255,230,180,0.18)"/>
+      <!-- window sill -->
+      <rect x="112" y="298" width="176" height="10" fill="#c4aa93" rx="1"/>
+      <!-- sill decor - small vase -->
+      <rect x="176" y="284" width="16" height="18" fill="#8a9e8c" rx="2"/>
+      <ellipse cx="184" cy="284" rx="5" ry="5" fill="#6b7e6d"/>
+      <!-- bench/seat -->
+      <rect x="70" y="330" width="260" height="48" fill="#b89a7e" rx="3"/>
+      <rect x="70" y="330" width="260" height="10" fill="#c4aa93" rx="2" opacity="0.7"/>
+      <!-- seat cushion -->
+      <rect x="78" y="322" width="244" height="14" fill="#c4aa93" rx="2"/>
+      <!-- throw on bench -->
+      <rect x="80" y="316" width="90" height="18" fill="#8a9e8c" rx="3" opacity="0.7" transform="rotate(-2 125 325)"/>
+      <!-- legs -->
+      <rect x="82" y="375" width="12" height="25" fill="#9c8068"/>
+      <rect x="306" y="375" width="12" height="25" fill="#9c8068"/>
+      <!-- floor -->
+      <rect x="0" y="400" width="400" height="40" fill="#c9b8a5"/>
+      <line x1="0" y1="420" x2="400" y2="420" stroke="#b8a492" stroke-width="1" opacity="0.4"/>
+    </svg>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="projects-header">
+    <div>
+      <div class="section-eyebrow fade-up">Selected Work</div>
+      <h2 class="section-title fade-up fade-up-delay-1">Homes We've<br><em>Crafted</em></h2>
+    </div>
+    <a href="#contact" class="btn-ghost fade-up" style="white-space:nowrap">View All Projects →</a>
+  </div>
+  <div class="projects-grid">
+
+    <!-- Card 1 - large -->
+    <div class="project-card fade-up">
+      <div class="project-card-inner">
+        <svg viewBox="0 0 360 600" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="360" height="600" fill="#e8ddd2"/>
+          <!-- dark Japandi living room -->
+          <rect x="0" y="0" width="360" height="380" fill="#2a2420"/>
+          <rect x="0" y="380" width="360" height="220" fill="#c9b8a5"/>
+          <!-- wood floor -->
+          <line x1="0" y1="395" x2="360" y2="395" stroke="#b8a492" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="420" x2="360" y2="420" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+          <line x1="0" y1="450" x2="360" y2="450" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+          <!-- tv panel dark wood -->
+          <rect x="20" y="180" width="320" height="160" fill="#1a1612" rx="2"/>
+          <rect x="40" y="200" width="280" height="110" fill="#111" rx="1"/>
+          <!-- tv screen glow -->
+          <rect x="40" y="200" width="280" height="110" fill="rgba(100,150,200,0.08)" rx="1"/>
+          <!-- shelf below -->
+          <rect x="40" y="312" width="280" height="20" fill="#2e2520" rx="1"/>
+          <!-- shelf decor -->
+          <rect x="60" y="295" width="12" height="20" fill="#8a9e8c" rx="1" opacity="0.8"/>
+          <rect x="80" y="290" width="10" height="25" fill="#c4aa93" rx="1" opacity="0.5"/>
+          <rect x="260" y="293" width="14" height="22" fill="#8a9e8c" rx="1" opacity="0.6"/>
+          <!-- pendant light -->
+          <line x1="180" y1="0" x2="180" y2="140" stroke="#c4aa93" stroke-width="2"/>
+          <ellipse cx="180" cy="155" rx="40" ry="18" fill="#1a1612" stroke="#c4aa93" stroke-width="1.5"/>
+          <ellipse cx="180" cy="165" rx="28" ry="12" fill="#2a1e12" opacity="0.8"/>
+          <ellipse cx="180" cy="170" rx="22" ry="8" fill="rgba(255,210,120,0.35)"/>
+          <!-- sofa -->
+          <rect x="40" y="355" width="280" height="55" fill="#3d3028" rx="3"/>
+          <rect x="40" y="330" width="280" height="32" fill="#332820" rx="2"/>
+          <rect x="50" y="338" width="78" height="22" fill="#3d3028" rx="2" opacity="0.8"/>
+          <rect x="148" y="338" width="78" height="22" fill="#3d3028" rx="2" opacity="0.8"/>
+          <rect x="246" y="338" width="66" height="22" fill="#3d3028" rx="2" opacity="0.8"/>
+          <rect x="40" y="344" width="18" height="66" fill="#2a1e12" rx="2"/>
+          <rect x="302" y="344" width="18" height="66" fill="#2a1e12" rx="2"/>
+          <!-- cream throw pillow -->
+          <rect x="160" y="342" width="46" height="32" fill="#c4aa93" rx="2" opacity="0.8" transform="rotate(-3 183 358)"/>
+          <!-- floor glow under pendant -->
+          <ellipse cx="180" cy="420" rx="80" ry="20" fill="rgba(255,210,120,0.08)"/>
+          <!-- rug -->
+          <ellipse cx="180" cy="430" rx="120" ry="30" fill="rgba(90,70,50,0.3)"/>
+          <!-- plant corner -->
+          <rect x="310" y="330" width="28" height="38" fill="#2e2520" rx="2"/>
+          <ellipse cx="324" cy="318" rx="22" ry="28" fill="#4a6b4a" opacity="0.9"/>
+          <ellipse cx="315" cy="308" rx="12" ry="16" fill="#4a6b4a" transform="rotate(-15 315 308)"/>
+          <ellipse cx="336" cy="310" rx="10" ry="14" fill="#5a7a5a" transform="rotate(12 336 310)"/>
+        </svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-info">
+        <div class="project-style">Dark Japandi · Resale HDB</div>
+        <div class="project-name">Strathmore Ave</div>
+        <div class="project-loc">Queenstown</div>
+      </div>
+      <div class="project-always-title">
+        <div class="project-always-style">Dark Japandi</div>
+        <div class="project-always-name">Strathmore Ave</div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="project-card fade-up fade-up-delay-1">
+      <div class="project-card-inner">
+        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="300" height="340" fill="#ede5d8"/>
+          <!-- wall warm white -->
+          <rect x="0" y="0" width="300" height="240" fill="#f0e8dc"/>
+          <!-- floor warm oak -->
+          <rect x="0" y="240" width="300" height="100" fill="#d4c0a8"/>
+          <line x1="0" y1="255" x2="300" y2="255" stroke="#c0aa90" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="275" x2="300" y2="275" stroke="#c0aa90" stroke-width="1" opacity="0.3"/>
+          <line x1="0" y1="295" x2="300" y2="295" stroke="#c0aa90" stroke-width="1" opacity="0.3"/>
+          <!-- kitchen counter -->
+          <rect x="0" y="160" width="300" height="90" fill="#c4aa93" rx="0"/>
+          <rect x="0" y="160" width="300" height="10" fill="#b8987a"/>
+          <!-- upper cabinets -->
+          <rect x="20" y="40" width="100" height="90" fill="#e0d0bc" rx="2"/>
+          <rect x="130" y="40" width="150" height="90" fill="#e0d0bc" rx="2"/>
+          <!-- cabinet lines -->
+          <line x1="70" y1="40" x2="70" y2="130" stroke="#c4aa93" stroke-width="1.5"/>
+          <line x1="205" y1="40" x2="205" y2="130" stroke="#c4aa93" stroke-width="1.5"/>
+          <line x1="20" y1="85" x2="120" y2="85" stroke="#c4aa93" stroke-width="1"/>
+          <line x1="130" y1="85" x2="280" y2="85" stroke="#c4aa93" stroke-width="1"/>
+          <!-- cabinet handles dots -->
+          <circle cx="47" cy="85" r="3" fill="#b89a7e"/>
+          <circle cx="95" cy="85" r="3" fill="#b89a7e"/>
+          <circle cx="175" cy="85" r="3" fill="#b89a7e"/>
+          <circle cx="243" cy="85" r="3" fill="#b89a7e"/>
+          <!-- counter appliances -->
+          <rect x="30" y="148" width="48" height="24" fill="#9c8068" rx="2"/>
+          <rect x="220" y="148" width="55" height="24" fill="#b89a7e" rx="2"/>
+          <!-- sink area -->
+          <rect x="120" y="158" width="60" height="14" fill="#a89078" rx="2"/>
+          <ellipse cx="150" cy="162" rx="20" ry="6" fill="#9c7e64" opacity="0.5"/>
+          <!-- faucet -->
+          <line x1="150" y1="152" x2="150" y2="135" stroke="#b89a7e" stroke-width="3"/>
+          <path d="M 150 135 Q 162 130 162 145" fill="none" stroke="#b89a7e" stroke-width="3"/>
+          <!-- pendant light kitchen -->
+          <line x1="150" y1="0" x2="150" y2="90" stroke="#c4aa93" stroke-width="1.5"/>
+          <rect x="126" y="90" width="48" height="28" fill="#e8ddd2" rx="30" stroke="#c4aa93" stroke-width="1.5"/>
+          <ellipse cx="150" cy="118" rx="18" ry="8" fill="rgba(255,210,120,0.25)"/>
+          <!-- lower cabinets front -->
+          <rect x="0" y="238" width="300" height="30" fill="#d4bcA0" rx="0"/>
+          <line x1="100" y1="238" x2="100" y2="268" stroke="#c4aa93" stroke-width="1.5"/>
+          <line x1="200" y1="238" x2="200" y2="268" stroke="#c4aa93" stroke-width="1.5"/>
+          <rect x="48" y="250" width="5" height="5" fill="#b89a7e" rx="1"/>
+          <rect x="148" y="250" width="5" height="5" fill="#b89a7e" rx="1"/>
+          <rect x="248" y="250" width="5" height="5" fill="#b89a7e" rx="1"/>
+        </svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-info">
+        <div class="project-style">Japandi · BTO HDB</div>
+        <div class="project-name">Bartley Walk</div>
+        <div class="project-loc">226B, Serangoon</div>
+      </div>
+      <div class="project-always-title">
+        <div class="project-always-style">Japandi</div>
+        <div class="project-always-name">226B Bartley Walk</div>
+      </div>
+    </div>
+
+    <!-- Card 3 -->
+    <div class="project-card fade-up fade-up-delay-2">
+      <div class="project-card-inner">
+        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="300" height="340" fill="#e8ddd2"/>
+          <!-- bedroom scene -->
+          <rect x="0" y="0" width="300" height="220" fill="#f0ece4"/>
+          <rect x="0" y="220" width="300" height="120" fill="#c9b8a5"/>
+          <!-- floor -->
+          <line x1="0" y1="238" x2="300" y2="238" stroke="#b8a492" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="260" x2="300" y2="260" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+          <!-- bed headboard -->
+          <rect x="30" y="80" width="240" height="120" fill="#c4aa93" rx="4"/>
+          <rect x="44" y="90" width="212" height="100" fill="#d4bcA0" rx="3"/>
+          <!-- headboard panel lines -->
+          <line x1="100" y1="90" x2="100" y2="190" stroke="#c4aa93" stroke-width="1.5"/>
+          <line x1="200" y1="90" x2="200" y2="190" stroke="#c4aa93" stroke-width="1.5"/>
+          <!-- pillows -->
+          <rect x="50" y="195" width="85" height="50" fill="#f5f0ea" rx="3"/>
+          <rect x="165" y="195" width="85" height="50" fill="#f5f0ea" rx="3"/>
+          <!-- blanket -->
+          <rect x="30" y="240" width="240" height="90" fill="#e8ddd2" rx="2"/>
+          <line x1="30" y1="260" x2="270" y2="260" stroke="#d4c4b0" stroke-width="1" opacity="0.5"/>
+          <line x1="30" y1="280" x2="270" y2="280" stroke="#d4c4b0" stroke-width="1" opacity="0.5"/>
+          <!-- sage accent pillow -->
+          <rect x="130" y="200" width="50" height="40" fill="#8a9e8c" rx="2" transform="rotate(3 155 220)"/>
+          <!-- pendant light -->
+          <line x1="150" y1="0" x2="150" y2="60" stroke="#c4aa93" stroke-width="1.5"/>
+          <ellipse cx="150" cy="70" rx="22" ry="14" fill="#e8ddd2" stroke="#c4aa93" stroke-width="1.5"/>
+          <ellipse cx="150" cy="82" rx="14" ry="8" fill="rgba(255,210,120,0.28)"/>
+          <!-- nightstand left -->
+          <rect x="0" y="220" width="40" height="50" fill="#b89a7e" rx="2"/>
+          <rect x="5" y="213" width="32" height="10" fill="#c4aa93" rx="1"/>
+          <!-- nightstand lamp -->
+          <line x1="21" y1="213" x2="21" y2="190" stroke="#9c8068" stroke-width="2"/>
+          <ellipse cx="21" cy="185" rx="18" ry="10" fill="#e8ddd2" stroke="#c4aa93" stroke-width="1"/>
+          <!-- nightstand right -->
+          <rect x="260" y="220" width="40" height="50" fill="#b89a7e" rx="2"/>
+          <rect x="263" y="213" width="32" height="10" fill="#c4aa93" rx="1"/>
+          <line x1="279" y1="213" x2="279" y2="190" stroke="#9c8068" stroke-width="2"/>
+          <ellipse cx="279" cy="185" rx="18" ry="10" fill="#e8ddd2" stroke="#c4aa93" stroke-width="1"/>
+          <!-- window top -->
+          <rect x="90" y="10" width="120" height="60" fill="#f5f0e8" rx="1" stroke="#d4c4b0" stroke-width="1.5"/>
+          <line x1="150" y1="10" x2="150" y2="70" stroke="#d4c4b0" stroke-width="1"/>
+          <line x1="90" y1="40" x2="210" y2="40" stroke="#d4c4b0" stroke-width="1"/>
+        </svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-info">
+        <div class="project-style">Wabi-Sabi · BTO HDB</div>
+        <div class="project-name">Canberra View</div>
+        <div class="project-loc">132C, Sembawang</div>
+      </div>
+      <div class="project-always-title">
+        <div class="project-always-style">Wabi-Sabi</div>
+        <div class="project-always-name">132C Canberra View</div>
+      </div>
+    </div>
+
+    <!-- Card 4 -->
+    <div class="project-card fade-up">
+      <div class="project-card-inner">
+        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="300" height="340" fill="#e0d8d0"/>
+          <!-- dining area -->
+          <rect x="0" y="0" width="300" height="210" fill="#ede7de"/>
+          <rect x="0" y="210" width="300" height="130" fill="#c9b8a5"/>
+          <line x1="0" y1="225" x2="300" y2="225" stroke="#b8a492" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="250" x2="300" y2="250" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+          <!-- round dining table -->
+          <ellipse cx="150" cy="240" rx="100" ry="40" fill="#9c8068"/>
+          <ellipse cx="150" cy="236" rx="100" ry="38" fill="#b89a7e"/>
+          <ellipse cx="150" cy="234" rx="96" ry="34" fill="#c4aa93"/>
+          <!-- table legs -->
+          <line x1="130" y1="265" x2="120" y2="310" stroke="#9c8068" stroke-width="4"/>
+          <line x1="170" y1="265" x2="180" y2="310" stroke="#9c8068" stroke-width="4"/>
+          <!-- chairs sketch -->
+          <rect x="60" y="224" width="40" height="32" fill="#b89a7e" rx="3" opacity="0.9"/>
+          <rect x="64" y="210" width="32" height="18" fill="#9c8068" rx="2" opacity="0.8"/>
+          <rect x="200" y="224" width="40" height="32" fill="#b89a7e" rx="3" opacity="0.9"/>
+          <rect x="204" y="210" width="32" height="18" fill="#9c8068" rx="2" opacity="0.8"/>
+          <rect x="128" y="202" width="44" height="28" fill="#b89a7e" rx="3" opacity="0.9" transform="rotate(-3 150 216)"/>
+          <!-- table decor -->
+          <ellipse cx="150" cy="228" rx="18" ry="8" fill="#8a9e8c" opacity="0.8"/>
+          <line x1="148" y1="220" x2="144" y2="204" stroke="#6b7e6d" stroke-width="1.5"/>
+          <ellipse cx="143" cy="202" rx="5" ry="4" fill="#8a9e8c" transform="rotate(-10 143 202)"/>
+          <line x1="152" y1="220" x2="156" y2="205" stroke="#6b7e6d" stroke-width="1.5"/>
+          <ellipse cx="157" cy="202" rx="5" ry="4" fill="#a0b5a2" transform="rotate(15 157 202)"/>
+          <!-- pendant above table -->
+          <line x1="150" y1="0" x2="150" y2="120" stroke="#c4aa93" stroke-width="2"/>
+          <rect x="118" y="120" width="64" height="40" fill="#e8ddd2" rx="30" stroke="#c4aa93" stroke-width="1.5"/>
+          <ellipse cx="150" cy="158" rx="25" ry="12" fill="rgba(255,210,120,0.3)"/>
+          <!-- wall decor arch -->
+          <path d="M 80 60 Q 80 20 130 20 L 170 20 Q 220 20 220 60 L 220 150 L 80 150 Z" fill="#e0d8d0" stroke="#c4aa93" stroke-width="1.5"/>
+          <path d="M 90 65 Q 90 28 132 28 L 168 28 Q 210 28 210 65 L 210 148 L 90 148 Z" fill="#ede7de"/>
+          <!-- artwork in arch -->
+          <ellipse cx="150" cy="96" rx="28" ry="36" fill="none" stroke="#8a9e8c" stroke-width="1" opacity="0.4"/>
+          <line x1="130" y1="110" x2="170" y2="80" stroke="#c4aa93" stroke-width="1" opacity="0.3"/>
+        </svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-info">
+        <div class="project-style">Japandi · BTO HDB</div>
+        <div class="project-name">Tampines</div>
+        <div class="project-loc">665, Tampines</div>
+      </div>
+      <div class="project-always-title">
+        <div class="project-always-style">Japandi</div>
+        <div class="project-always-name">665 Tampines</div>
+      </div>
+    </div>
+
+    <!-- Card 5 -->
+    <div class="project-card fade-up fade-up-delay-1">
+      <div class="project-card-inner">
+        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="300" height="340" fill="#e8ddd2"/>
+          <!-- condo living - modern contemporary -->
+          <rect x="0" y="0" width="300" height="200" fill="#f2ece4"/>
+          <rect x="0" y="200" width="300" height="140" fill="#cdb89e"/>
+          <!-- floor lines -->
+          <line x1="0" y1="218" x2="300" y2="218" stroke="#b8a492" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="240" x2="300" y2="240" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+          <!-- large window floor to ceiling -->
+          <rect x="50" y="0" width="200" height="180" fill="#e8f0f5" rx="1" stroke="#c4b4a0" stroke-width="2"/>
+          <line x1="150" y1="0" x2="150" y2="180" stroke="#c4b4a0" stroke-width="1.5"/>
+          <line x1="50" y1="90" x2="250" y2="90" stroke="#c4b4a0" stroke-width="1"/>
+          <line x1="50" y1="45" x2="250" y2="45" stroke="#c4b4a0" stroke-width="0.8"/>
+          <line x1="50" y1="135" x2="250" y2="135" stroke="#c4b4a0" stroke-width="0.8"/>
+          <!-- view through window - city skyline hint -->
+          <rect x="50" y="0" width="200" height="180" fill="rgba(200,230,250,0.15)"/>
+          <rect x="60" y="100" width="20" height="80" fill="rgba(100,120,140,0.1)" rx="1"/>
+          <rect x="88" y="80" width="18" height="100" fill="rgba(100,120,140,0.08)" rx="1"/>
+          <rect x="200" y="90" width="22" height="90" fill="rgba(100,120,140,0.08)" rx="1"/>
+          <rect x="228" y="70" width="16" height="110" fill="rgba(100,120,140,0.1)" rx="1"/>
+          <!-- minimalist sofa -->
+          <rect x="10" y="192" width="220" height="55" fill="#c4aa93" rx="3"/>
+          <rect x="10" y="175" width="220" height="22" fill="#b39882" rx="2"/>
+          <rect x="10" y="182" width="14" height="60" fill="#a8896e" rx="1"/>
+          <rect x="216" y="182" width="14" height="60" fill="#a8896e" rx="1"/>
+          <!-- cushions -->
+          <rect x="22" y="183" width="52" height="16" fill="#c4aa93" rx="2" opacity="0.8"/>
+          <rect x="82" y="183" width="52" height="16" fill="#c4aa93" rx="2" opacity="0.8"/>
+          <rect x="142" y="183" width="52" height="16" fill="#c4aa93" rx="2" opacity="0.8"/>
+          <!-- sage throw -->
+          <rect x="78" y="178" width="48" height="24" fill="#8a9e8c" rx="2" opacity="0.75" transform="rotate(2 102 190)"/>
+          <!-- coffee table long low -->
+          <rect x="20" y="252" width="220" height="40" fill="#9c8068" rx="2"/>
+          <rect x="20" y="252" width="220" height="8" fill="#b89a7e" rx="1"/>
+          <!-- table decor books -->
+          <rect x="38" y="244" width="30" height="14" fill="#8a9e8c" rx="1" opacity="0.8"/>
+          <rect x="42" y="237" width="25" height="9" fill="#c4aa93" rx="1" opacity="0.6"/>
+          <!-- plant right -->
+          <rect x="260" y="220" width="30" height="40" fill="#a8896e" rx="2" opacity="0.8"/>
+          <ellipse cx="275" cy="208" rx="24" ry="30" fill="#4a6b4a" opacity="0.85"/>
+          <ellipse cx="264" cy="196" rx="12" ry="18" fill="#4a6b4a" transform="rotate(-15 264 196)"/>
+          <ellipse cx="288" cy="198" rx="10" ry="16" fill="#5a7a5a" transform="rotate(12 288 198)"/>
+        </svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-info">
+        <div class="project-style">Modern Contemporary · Condo</div>
+        <div class="project-name">Thomson Road</div>
+        <div class="project-loc">368, City Fringe</div>
+      </div>
+      <div class="project-always-title">
+        <div class="project-always-style">Contemporary</div>
+        <div class="project-always-name">368 Thomson Road</div>
+      </div>
+    </div>
+
+    <!-- Card 6 -->
+    <div class="project-card fade-up fade-up-delay-2">
+      <div class="project-card-inner">
+        <svg viewBox="0 0 300 340" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;">
+          <rect width="300" height="340" fill="#e8ddd2"/>
+          <!-- Scandinavian home study -->
+          <rect x="0" y="0" width="300" height="210" fill="#f5f0ea"/>
+          <rect x="0" y="210" width="300" height="130" fill="#c9b8a5"/>
+          <line x1="0" y1="228" x2="300" y2="228" stroke="#b8a492" stroke-width="1" opacity="0.4"/>
+          <line x1="0" y1="252" x2="300" y2="252" stroke="#b8a492" stroke-width="1" opacity="0.3"/>
+          <!-- desk -->
+          <rect x="30" y="190" width="230" height="32" fill="#b89a7e" rx="2"/>
+          <rect x="30" y="190" width="230" height="8" fill="#c4aa93" rx="1"/>
+          <rect x="38" y="220" width="10" height="50" fill="#9c8068" rx="1"/>
+          <rect x="242" y="220" width="10" height="50" fill="#9c8068" rx="1"/>
+          <!-- monitor on desk -->
+          <rect x="110" y="140" width="90" height="56" fill="#2a2420" rx="3"/>
+          <rect x="116" y="144" width="78" height="46" fill="#1a1612" rx="1"/>
+          <rect x="116" y="144" width="78" height="46" fill="rgba(100,150,200,0.12)" rx="1"/>
+          <rect x="148" y="196" width="14" height="6" fill="#2a2420"/>
+          <rect x="138" y="199" width="34" height="3" fill="#2a2420" rx="1"/>
+          <!-- keyboard mouse -->
+          <rect x="120" y="200" width="58" height="14" fill="#3d3028" rx="2" opacity="0.7"/>
+          <ellipse cx="200" cy="206" rx="8" ry="10" fill="#3d3028" opacity="0.7"/>
+          <!-- lamp on desk -->
+          <line x1="68" y1="190" x2="68" y2="120" stroke="#9c8068" stroke-width="3"/>
+          <line x1="68" y1="120" x2="96" y2="100" stroke="#9c8068" stroke-width="2.5"/>
+          <ellipse cx="96" cy="100" rx="24" ry="14" fill="#e8ddd2" stroke="#c4aa93" stroke-width="1.5" transform="rotate(-15 96 100)"/>
+          <ellipse cx="110" cy="107" rx="14" ry="8" fill="rgba(255,210,120,0.3)"/>
+          <!-- books on desk left -->
+          <rect x="38" y="174" width="14" height="20" fill="#8a9e8c" rx="1"/>
+          <rect x="53" y="177" width="12" height="17" fill="#c4aa93" rx="1"/>
+          <rect x="66" y="175" width="10" height="19" fill="#b89a7e" rx="1"/>
+          <!-- wall shelves -->
+          <rect x="190" y="60" width="100" height="8" fill="#c4aa93" rx="1"/>
+          <rect x="190" y="120" width="100" height="8" fill="#c4aa93" rx="1"/>
+          <!-- shelf items -->
+          <rect x="198" y="40" width="10" height="22" fill="#8a9e8c" rx="1"/>
+          <rect x="210" y="44" width="8" height="18" fill="#c4aa93" rx="1"/>
+          <rect x="220" y="42" width="10" height="20" fill="#9c8068" rx="1"/>
+          <rect x="262" y="44" width="22" height="18" fill="#8a9e8c" rx="1" opacity="0.5"/>
+          <rect x="198" y="100" width="10" height="22" fill="#9c8068" rx="1"/>
+          <rect x="210" y="102" width="8" height="20" fill="#8a9e8c" rx="1"/>
+          <rect x="268" y="100" width="16" height="22" fill="#c4aa93" rx="1" opacity="0.7"/>
+          <!-- plant on floor -->
+          <rect x="256" y="170" width="22" height="44" fill="#9c8068" rx="2" opacity="0.8"/>
+          <ellipse cx="267" cy="158" rx="20" ry="26" fill="#5a7a5a" opacity="0.85"/>
+          <ellipse cx="258" cy="148" rx="10" ry="15" fill="#4a6b4a" transform="rotate(-12 258 148)"/>
+          <ellipse cx="276" cy="150" rx="9" ry="14" fill="#6a8a6a" transform="rotate(10 276 150)"/>
+          <!-- window small top left -->
+          <rect x="10" y="20" width="80" height="100" fill="#e8f0f5" rx="1" stroke="#c4b4a0" stroke-width="1.5"/>
+          <line x1="10" y1="70" x2="90" y2="70" stroke="#c4b4a0" stroke-width="1"/>
+          <line x1="50" y1="20" x2="50" y2="120" stroke="#c4b4a0" stroke-width="1"/>
+          <rect x="10" y="20" width="80" height="100" fill="rgba(200,230,250,0.12)"/>
+        </svg>
+      </div>
+      <div class="project-overlay"></div>
+      <div class="project-info">
+        <div class="project-style">Scandinavian · HDB Resale</div>
+        <div class="project-name">Woodlands</div>
+        <div class="project-loc">757, Woodlands</div>
+      </div>
+      <div class="project-always-title">
+        <div class="project-always-style">Scandinavian</div>
+        <div class="project-always-name">757 Woodlands</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section id="process">
+  <div class="section-eyebrow fade-up">How We Work</div>
+  <h2 class="section-title fade-up fade-up-delay-1">Your <em>Renovation Journey</em>,<br>Start to Finish</h2>
+  <div class="process-steps">
+    <div class="process-step fade-up">
+      <div class="step-num">01</div>
+      <div class="step-title">Consult & Discover</div>
+      <p class="step-desc">Share your floor plan, inspiration images, and budget. We listen first — no pressure, no templates. Just honest conversation about what your home could be.</p>
+    </div>
+    <div class="process-step fade-up fade-up-delay-1">
+      <div class="step-num">02</div>
+      <div class="step-title">Design & Visualise</div>
+      <p class="step-desc">Our team develops space plans, mood boards, and 3D visuals tailored to your goals. You'll see your home before a single nail is hammered.</p>
+    </div>
+    <div class="process-step fade-up fade-up-delay-2">
+      <div class="step-num">03</div>
+      <div class="step-title">Refine & Confirm</div>
+      <p class="step-desc">We walk through every detail with you — layout tweaks, material selections, fittings — until you're 100% confident in the direction.</p>
+    </div>
+    <div class="process-step fade-up fade-up-delay-3">
+      <div class="step-num">04</div>
+      <div class="step-title">Build & Deliver</div>
+      <p class="step-desc">Our in-house team handles all works with regular photo updates and quality checks. We don't hand over until it's right.</p>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section id="testimonials">
+  <div class="section-eyebrow fade-up">Client Reviews</div>
+  <h2 class="section-title fade-up fade-up-delay-1">What Our<br><em>Homeowners</em> Say</h2>
+  <div class="testi-grid">
+    <div class="testi-card fade-up">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">Mr. Willy truly understands the customer needs. He is punctual and dedicated to deliver what we want, not like any other reno firms who give empty promises. He completed the renovation on time. Thanks to Mr. Willy!</p>
+      <div class="testi-divider"></div>
+      <div class="testi-author">Shree Vaishnavi</div>
+      <div class="testi-project">HDB Renovation · Singapore</div>
+    </div>
+    <div class="testi-card fade-up fade-up-delay-1">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">I have had a very pleasant dealing with Kok Leong's professionalism and expertise. He has made my small apartment very comfortable and cozy despite the size. Totally reliable and responsible. Very satisfied.</p>
+      <div class="testi-divider"></div>
+      <div class="testi-author">Lucille Leong</div>
+      <div class="testi-project">Condo Renovation · Singapore</div>
+    </div>
+    <div class="testi-card fade-up fade-up-delay-2">
+      <div class="testi-quote-mark">"</div>
+      <p class="testi-text">Thank you Jeffery for the great experience we had for the renovation! Although it is just a small project, he puts in a lot of effort and is very responsible and responsive to our enquiries. Highly recommended!</p>
+      <div class="testi-divider"></div>
+      <div class="testi-author">Li Juan</div>
+      <div class="testi-project">HDB Renovation · Singapore</div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div>
+    <div class="section-eyebrow fade-up">Let's Connect</div>
+    <h2 class="section-title fade-up fade-up-delay-1">Ready to Build<br>Your <em>Dream Home?</em></h2>
+    <p class="section-sub fade-up fade-up-delay-2">
+      Tell us about your space and we'll get back to you within one business day. First consultation is always free.
+    </p>
+    <div class="contact-detail fade-up fade-up-delay-2">
+      <div>
+        <div class="contact-item-label">WhatsApp / Call</div>
+        <a href="https://wa.me/6594312459" class="contact-item-val">+65 9431 2459</a>
+      </div>
+      <div>
+        <div class="contact-item-label">Email</div>
+        <a href="mailto:sales.swiftinterior@gmail.com" class="contact-item-val">sales.swiftinterior@gmail.com</a>
+      </div>
+      <div>
+        <div class="contact-item-label">Showroom</div>
+        <div class="contact-item-val">61 Ubi Rd 1, #01-25 Oxley BizHub, Singapore 408727</div>
+      </div>
+      <div>
+        <div class="contact-item-label">Hours</div>
+        <div class="contact-item-val" style="font-family:var(--font-body);font-size:0.95rem;">Mon–Sat 10am–7pm</div>
+      </div>
+    </div>
+  </div>
+  <div class="fade-up fade-up-delay-1">
+    <form onsubmit="return false;">
+      <div class="form-group">
+        <label>Your Name</label>
+        <input type="text" placeholder="e.g. Sarah Tan">
+      </div>
+      <div class="form-group">
+        <label>Phone / WhatsApp</label>
+        <input type="tel" placeholder="+65 XXXX XXXX">
+      </div>
+      <div class="form-group">
+        <label>Home Type</label>
+        <select>
+          <option value="">Select your home type</option>
+          <option>HDB BTO (4-Room)</option>
+          <option>HDB BTO (5-Room)</option>
+          <option>HDB Resale</option>
+          <option>Condominium</option>
+          <option>Landed Property</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Design Style</label>
+        <select>
+          <option value="">Preferred style</option>
+          <option>Japandi</option>
+          <option>Wabi-Sabi</option>
+          <option>Scandinavian</option>
+          <option>Modern Minimalist</option>
+          <option>Not sure yet</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Tell us about your project</label>
+        <textarea placeholder="Move-in date, key requirements, inspiration..."></textarea>
+      </div>
+      <button type="submit" class="form-submit">Send Enquiry →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Swift <span>Design Studio</span></div>
+    <p style="margin-top:8px;">61 Ubi Rd 1, #01-25 Oxley BizHub, Singapore 408727</p>
+  </div>
+  <div class="footer-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#process">Process</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <p>© 2026 Swift Design Studio Pte Ltd · HDB Licensed · UEN 202128153K</p>
+</footer>
+
+<script>
+  // Cursor
+  const dot = document.getElementById('cursor-dot');
+  const ring = document.getElementById('cursor-ring');
+  let rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    dot.style.left = e.clientX + 'px';
+    dot.style.top = e.clientY + 'px';
+    rx += (e.clientX - rx) * 0.14;
+    ry += (e.clientY - ry) * 0.14;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+  });
+  function animRing() {
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+
+  // Scroll progress
+  const bar = document.getElementById('progress-bar');
+  window.addEventListener('scroll', () => {
+    const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    bar.style.width = (p * 100) + '%';
+  });
+
+  // Nav scroll
+  const nav = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Fade-up on scroll
+  const faders = document.querySelectorAll('.fade-up');
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.12 });
+  faders.forEach(el => obs.observe(el));
+
+  // Trigger hero elements immediately
+  document.querySelectorAll('#hero .fade-up, .marquee-wrap .fade-up').forEach(el => el.classList.add('visible'));
+</script>
+</body>
+</html>
